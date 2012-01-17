@@ -1,4 +1,4 @@
-Commons Build Repository
+Commons App Core Repository
 -------------------------------
 This repo contains the app-core project. 
 The app-core is the core of the application that provides a common runtime for other parts of the app to run.
