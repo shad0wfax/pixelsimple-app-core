@@ -9,9 +9,10 @@ import junit.framework.Assert;
 import org.junit.After;
 import org.junit.Test;
 
+import com.pixelsimple.appcore.ApiConfigImpl;
 import com.pixelsimple.appcore.Registrable;
 import com.pixelsimple.appcore.Registry;
-import com.pixelsimple.appcore.config.ffmpeg.FfmpegConfig;
+import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 
 /**
  *
@@ -65,7 +66,7 @@ public class MapRegistryTest {
 		}
 		
 		try {
-			reg1.register(Registrable.FFMPEG_CONFIG, null);
+			reg1.register(Registrable.API_CONFIG, null);
 			fail();
 		} catch (IllegalArgumentException e) {
 			Assert.assertTrue(true);
@@ -78,14 +79,14 @@ public class MapRegistryTest {
 	@Test
 	public void register() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
+		Object val = new ApiConfigImpl();
 		
-		reg1.register(Registrable.FFMPEG_CONFIG, val);
-		Assert.assertEquals(reg1.containsKey(Registrable.FFMPEG_CONFIG), true);
+		reg1.register(Registrable.API_CONFIG, val);
+		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), true);
 
 		// Should have no effect.
-		reg1.register(Registrable.FFMPEG_CONFIG, "abc");
-		Object valret = reg1.fetch(Registrable.FFMPEG_CONFIG);
+		reg1.register(Registrable.API_CONFIG, "abc");
+		Object valret = reg1.fetch(Registrable.API_CONFIG);
 		
 		Assert.assertEquals(valret, val);
 		Assert.assertTrue(valret == val);
@@ -106,7 +107,7 @@ public class MapRegistryTest {
 		}
 		
 		try {
-			reg1.forceRegister(Registrable.FFMPEG_CONFIG, null);
+			reg1.forceRegister(Registrable.API_CONFIG, null);
 			fail();
 		} catch (IllegalArgumentException e) {
 			Assert.assertTrue(true);
@@ -118,14 +119,14 @@ public class MapRegistryTest {
 	@Test
 	public void forceRegister() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
+		Object val = new ApiConfigImpl();
 		
-		reg1.forceRegister(Registrable.FFMPEG_CONFIG, val);
-		Assert.assertEquals(reg1.containsKey(Registrable.FFMPEG_CONFIG), true);
+		reg1.forceRegister(Registrable.API_CONFIG, val);
+		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), true);
 
 		// Should have no effect.
-		reg1.forceRegister(Registrable.FFMPEG_CONFIG, "abc");
-		Object valret = reg1.fetch(Registrable.FFMPEG_CONFIG);
+		reg1.forceRegister(Registrable.API_CONFIG, "abc");
+		Object valret = reg1.fetch(Registrable.API_CONFIG);
 		
 		Assert.assertNotSame(valret, val);
 		Assert.assertTrue(valret != val);
@@ -138,14 +139,14 @@ public class MapRegistryTest {
 	@Test
 	public void fetch() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
+		Object val = new ApiConfigImpl();
 		
-		reg1.register(Registrable.FFMPEG_CONFIG, val);
-		Assert.assertEquals(reg1.containsKey(Registrable.FFMPEG_CONFIG), true);
+		reg1.register(Registrable.API_CONFIG, val);
+		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), true);
 
 		// Should have no effect.
-		reg1.register(Registrable.FFMPEG_CONFIG, "abc");
-		Object valret = reg1.fetch(Registrable.FFMPEG_CONFIG);
+		reg1.register(Registrable.API_CONFIG, "abc");
+		Object valret = reg1.fetch(Registrable.API_CONFIG);
 		
 		Assert.assertEquals(valret, val);
 		Assert.assertTrue(valret == val);
@@ -157,19 +158,19 @@ public class MapRegistryTest {
 	@Test
 	public void remove() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
+		Object val = new ApiConfigImpl();
 		
-		reg1.register(Registrable.FFMPEG_CONFIG, "abc");
-		Assert.assertEquals(reg1.containsKey(Registrable.FFMPEG_CONFIG), true);
+		reg1.register(Registrable.API_CONFIG, "abc");
+		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), true);
 
-		Object valret = reg1.fetch(Registrable.FFMPEG_CONFIG);
+		Object valret = reg1.fetch(Registrable.API_CONFIG);
 		
 		Assert.assertEquals(valret, "abc");
 
-		reg1.remove(Registrable.FFMPEG_CONFIG);
+		reg1.remove(Registrable.API_CONFIG);
 		
-		reg1.register(Registrable.FFMPEG_CONFIG, val);
-		valret = reg1.fetch(Registrable.FFMPEG_CONFIG);
+		reg1.register(Registrable.API_CONFIG, val);
+		valret = reg1.fetch(Registrable.API_CONFIG);
 		
 		Assert.assertEquals(valret, val);
 		Assert.assertTrue(valret == val);
@@ -181,11 +182,11 @@ public class MapRegistryTest {
 	@Test
 	public void testRemoveAll() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
-		reg1.register(Registrable.FFMPEG_CONFIG, val);
-		reg1.register(Registrable.FFPROBE_CONFIG, "abc");
+		Object val = new ApiConfigImpl();
+		reg1.register(Registrable.API_CONFIG, val);
+//		reg1.register(Registrable.FFPROBE_CONFIG, "abc");
 
-		Assert.assertEquals(reg1.fetchAllValues().size(), 2);
+		Assert.assertEquals(reg1.fetchAllValues().size(), 1);
 
 		reg1.removeAll();
 		
@@ -198,11 +199,11 @@ public class MapRegistryTest {
 	@Test
 	public void testFetchAllValues() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
-		reg1.register(Registrable.FFMPEG_CONFIG, val);
-		reg1.register(Registrable.FFPROBE_CONFIG, "abc");
+		Object val = new ApiConfigImpl();
+		reg1.register(Registrable.API_CONFIG, val);
+//		reg1.register(Registrable.FFPROBE_CONFIG, "abc");
 
-		Assert.assertEquals(reg1.fetchAllValues().size(), 2);
+		Assert.assertEquals(reg1.fetchAllValues().size(), 1);
 	}
 
 	/**
@@ -211,12 +212,14 @@ public class MapRegistryTest {
 	@Test
 	public void testContainsKey() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new FfmpegConfig();
+		Object val = new ApiConfigImpl();
 		
-		reg1.register(Registrable.FFMPEG_CONFIG, "abc");
-		Assert.assertEquals(reg1.containsKey(Registrable.FFMPEG_CONFIG), true);
+		reg1.register(Registrable.API_CONFIG, "abc");
+		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), true);
 		
-		Assert.assertEquals(reg1.containsKey(Registrable.FFPROBE_CONFIG), false);
+		reg1.removeAll();
+		
+		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), false);
 	}
 
 }

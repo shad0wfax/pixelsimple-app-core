@@ -15,8 +15,7 @@ package com.pixelsimple.appcore;
  */
 public enum Registrable {
 	
-	FFMPEG_CONFIG, 
-	FFPROBE_CONFIG,
-	ENVIRONMENT_CONFIG;
+	API_CONFIG
+	// Add more:
 
 }

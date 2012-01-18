@@ -1,7 +1,9 @@
 /**
  * © PixelSimple 2011-2012.
  */
-package com.pixelsimple.appcore;
+package com.pixelsimple.appcore.env;
+
+import com.pixelsimple.commons.util.OSUtils;
 
 /**
  * 
@@ -10,5 +12,10 @@ package com.pixelsimple.appcore;
  * Jan 16, 2012
  */
 public interface Environment {
+	
+	public OSUtils.OS getCurrentOS();
+
+	public String getAppBasePath();
+
 
 }
