@@ -42,9 +42,9 @@ public class FfmpegConfigTest {
 			if (OSUtils.CURRENT_OS == OS.WINDOWS) {
 				// Keep this path up to date with ffmpeg updates
 				validFile = "c:/dev/pixelsimple/ffmpeg/32_bit/0.8/ffmpeg.exe";
-			} else if (OSUtils.CURRENT_OS == OS.WINDOWS) {
+			} else if (OSUtils.CURRENT_OS == OS.MAC	) {
 				// Keep this path up to date with ffmpeg updates
-				validFile = "~/dev/pixelsimple/ffmpeg/32_bit/0.8.7/ffmpeg";
+				validFile = OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffmpeg/32_bit/0.8.7/ffmpeg";
 			}  
 			
 			if (validFile != null) {

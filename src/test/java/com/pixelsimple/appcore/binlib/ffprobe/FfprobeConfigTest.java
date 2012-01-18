@@ -42,9 +42,9 @@ public class FfprobeConfigTest {
 			if (OSUtils.CURRENT_OS == OS.WINDOWS) {
 				// Keep this path up to date with ffmpeg updates
 				validFile = "c:/dev/pixelsimple/ffprobe/32_bit/0.8/ffprobe.exe";
-			} else if (OSUtils.CURRENT_OS == OS.WINDOWS) {
+			} else if (OSUtils.CURRENT_OS == OS.MAC) {
 				// Keep this path up to date with ffmpeg updates
-				validFile = "~/dev/pixelsimple/ffprobe/32_bit/0.7_beta2/ffprobe";
+				validFile =  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffprobe/32_bit/0.7_beta2/ffprobe";
 			}  
 			
 			if (validFile != null) {
