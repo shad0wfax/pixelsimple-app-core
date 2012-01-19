@@ -16,6 +16,7 @@ import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 import com.pixelsimple.appcore.binlib.ffprobe.FfprobeConfig;
 import com.pixelsimple.appcore.env.Environment;
 import com.pixelsimple.appcore.env.EnvironmentImpl;
+import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
  *
@@ -37,7 +38,7 @@ public class AppInitializer {
 	 */
 	public void init(Map<String, String> configMap) {
 		// Init log?? (it must already be)
-		LOG.debug("Initing the app with the argMap:: {}", configMap);
+		LOG.debug("init::Initing the app with the argMap:: {}", configMap);
 		ApiConfigImpl apiConfigImpl = new ApiConfigImpl();
 		
 		// Init Environment
@@ -53,8 +54,10 @@ public class AppInitializer {
 		apiConfigImpl.setEnvironment(env).setFfmpegConfig(ffmpegConfig).setFfprobeConfig(ffprobeConfig);
 		
 		// Init Registry and save the api config.
-		Registry registry = RegistryService.getRegistry();
+		Registry registry = MapRegistry.INSTANCE;
 		registry.register(Registrable.API_CONFIG, apiConfigImpl);
+		
+		LOG.debug("init::Registered API Config:: {}", apiConfigImpl);
 	}
 
 

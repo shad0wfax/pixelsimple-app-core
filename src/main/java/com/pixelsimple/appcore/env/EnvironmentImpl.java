@@ -36,5 +36,8 @@ public final class EnvironmentImpl implements Environment {
 		this.appBasePath = appBasePath;
 	}
 
-	
+	public String toString() {
+		return "appBasePath::" + appBasePath + "::CURRENT_OS::" + CURRENT_OS;
+	}
+
 }

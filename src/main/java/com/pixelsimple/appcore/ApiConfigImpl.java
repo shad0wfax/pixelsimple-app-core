@@ -56,5 +56,9 @@ public final class ApiConfigImpl implements ApiConfig {
 		this.environment = environment;
 		return this;
 	}
+	
+	public String toString() {
+		return "APIConfig::\n" + this.ffmpegConfig.toString()+ "\n" + this.ffprobeConfig.toString() + "\n" + this.environment.toString();
+	}
 
 }

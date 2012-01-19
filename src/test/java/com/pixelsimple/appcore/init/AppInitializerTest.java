@@ -11,7 +11,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.pixelsimple.appcore.ApiConfig;
-import com.pixelsimple.appcore.Registrable;
 import com.pixelsimple.appcore.RegistryService;
 import com.pixelsimple.commons.util.OSUtils;
 import com.pixelsimple.commons.util.OSUtils.OS;
@@ -47,7 +46,7 @@ public class AppInitializerTest {
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
 		
-		ApiConfig config = (ApiConfig) RegistryService.getRegistry().fetch(Registrable.API_CONFIG);
+		ApiConfig config = (ApiConfig) RegistryService.getRegisteredApiConfig();
 		
 		Assert.assertNotNull(config);
 		Assert.assertEquals(config.getFfmpegConfig().getExecutablePath(), configs.get("ffmpegPath"));

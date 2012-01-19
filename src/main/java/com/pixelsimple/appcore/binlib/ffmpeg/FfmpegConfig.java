@@ -31,5 +31,8 @@ public final class FfmpegConfig {
 		return this.executablePath;
 	}
 
+	public String toString() {
+		return "Ffmpeg path::" + executablePath;
+	}
 
 }
