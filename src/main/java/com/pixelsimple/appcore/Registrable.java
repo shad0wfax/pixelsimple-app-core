@@ -15,7 +15,11 @@ package com.pixelsimple.appcore;
  */
 public enum Registrable {
 	
-	API_CONFIG
+	API_CONFIG,
+	SUPPORTED_CONTAINER_FORMATS,
+	SUPPORTED_AUDIO_CODECS,
+	SUPPORTED_VIDEO_CODECS,
+	MEDIA_PROFILES,
 	// Add more:
 
 }

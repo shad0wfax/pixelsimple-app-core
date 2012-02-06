@@ -3,6 +3,12 @@
  */
 package com.pixelsimple.appcore;
 
+import java.util.Map;
+
+import com.pixelsimple.appcore.media.AudioCodecs;
+import com.pixelsimple.appcore.media.ContainerFormats;
+import com.pixelsimple.appcore.media.Profile;
+import com.pixelsimple.appcore.media.VideoCodecs;
 import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
@@ -23,4 +29,22 @@ public final class RegistryService {
 	public static ApiConfig getRegisteredApiConfig() {
 		return (ApiConfig) MapRegistry.INSTANCE.fetch(Registrable.API_CONFIG);
 	}
+	
+	public static ContainerFormats getSupportedContainerFormats() {
+		return (ContainerFormats) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CONTAINER_FORMATS);
+	}
+
+	public static AudioCodecs getSupportedAudioCodecs() {
+		return (AudioCodecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_AUDIO_CODECS);
+	}
+
+	public static VideoCodecs getSupportedVideoCodecs() {
+		return (VideoCodecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_VIDEO_CODECS);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static Map<String, Profile> getMediaProfiles() {
+		return (Map<String, Profile>) MapRegistry.INSTANCE.fetch(Registrable.MEDIA_PROFILES);
+	}
+
 }

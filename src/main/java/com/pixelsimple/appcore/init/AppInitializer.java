@@ -11,11 +11,15 @@ import org.slf4j.LoggerFactory;
 import com.pixelsimple.appcore.ApiConfigImpl;
 import com.pixelsimple.appcore.Registrable;
 import com.pixelsimple.appcore.Registry;
-import com.pixelsimple.appcore.RegistryService;
 import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 import com.pixelsimple.appcore.binlib.ffprobe.FfprobeConfig;
 import com.pixelsimple.appcore.env.Environment;
 import com.pixelsimple.appcore.env.EnvironmentImpl;
+import com.pixelsimple.appcore.media.AudioCodecs;
+import com.pixelsimple.appcore.media.ContainerFormats;
+import com.pixelsimple.appcore.media.MediaInfoParserFactory;
+import com.pixelsimple.appcore.media.Profile;
+import com.pixelsimple.appcore.media.VideoCodecs;
 import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
@@ -36,7 +40,7 @@ public class AppInitializer {
 	/**
 	 * @param argMap
 	 */
-	public void init(Map<String, String> configMap) {
+	public void init(Map<String, String> configMap) throws Exception {
 		// Init log?? (it must already be)
 		LOG.debug("init::Initing the app with the argMap:: {}", configMap);
 		ApiConfigImpl apiConfigImpl = new ApiConfigImpl();
@@ -48,18 +52,25 @@ public class AppInitializer {
 		FfmpegConfig ffmpegConfig = this.initFfmpeg(configMap);
 		FfprobeConfig ffprobeConfig = this.initFfprobe(configMap);
 		
-		// DB and so on...
-
 		// Set it to the Api config:
 		apiConfigImpl.setEnvironment(env).setFfmpegConfig(ffmpegConfig).setFfprobeConfig(ffprobeConfig);
+
+		LOG.debug("init::Registered API Config:: {}", apiConfigImpl);
 		
 		// Init Registry and save the api config.
 		Registry registry = MapRegistry.INSTANCE;
 		registry.register(Registrable.API_CONFIG, apiConfigImpl);
 		
-		LOG.debug("init::Registered API Config:: {}", apiConfigImpl);
-	}
+		
+		// initContainersAndCodecs
+		this.initContainersAndCodecs(registry);
 
+		// initSupportedMediaProfile
+		this.initMediaProfiles(registry);
+
+		// Other intis - DB and so on...
+
+	}
 
 	/**
 	 * @param configMap
@@ -82,7 +93,6 @@ public class AppInitializer {
 		return ffmpegConfig;
 	}
 
-
 	/**
 	 * @param configMap
 	 * @return
@@ -95,4 +105,31 @@ public class AppInitializer {
 		
 		return environment;
 	}
+
+	/**
+	 * @param registry
+	 */
+	private void initContainersAndCodecs(Registry registry) throws Exception {
+		ContainerFormats containerFormats = new ContainerFormats();
+		AudioCodecs audioCodecs = new AudioCodecs();
+		VideoCodecs videoCodecs = new VideoCodecs();
+		MediaInfoParserFactory.parseContainerAndCodecs(containerFormats, audioCodecs, videoCodecs);
+		
+		// Load these objects up in registry
+		registry.register(Registrable.SUPPORTED_CONTAINER_FORMATS, containerFormats);
+		registry.register(Registrable.SUPPORTED_AUDIO_CODECS, audioCodecs);
+		registry.register(Registrable.SUPPORTED_VIDEO_CODECS, videoCodecs);
+	}
+
+	/**
+	 * @param registry
+	 */
+	private void initMediaProfiles(Registry registry) throws Exception {
+		Map<String, Profile> profiles = MediaInfoParserFactory.parseMediaProfiles();
+		
+		// Load these objects up in registry
+		registry.register(Registrable.MEDIA_PROFILES, profiles);
+	}
+
+
 }

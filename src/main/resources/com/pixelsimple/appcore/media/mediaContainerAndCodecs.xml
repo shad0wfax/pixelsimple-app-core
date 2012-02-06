@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<media>
+	<containerFormats>
+		<format>flv</format>
+		<format>f4v</format>
+		<format>wmv</format>
+		<format>mp4</format>
+		<format>m4v</format>
+		<format>ogg</format>
+		<format>webm</format>
+		
+		<!-- // Mpeg1 standard -->
+		<format>mpeg</format>
+
+		<format>mpegts</format>
+		<format>avi</format>
+		<format>mkv</format>
+		<format>divx</format>
+		<format>mov</format>
+		<format>3gp</format>
+		
+		<!-- // Audio ones -->
+		<format>mp3</format>
+		<format>wma</format>
+		<format>m4a</format>
+
+	</containerFormats>
+	
+	<audioCodecs>
+	
+		<codec>wmav2</codec>
+		<codec>ac3</codec>
+		<codec>flac</codec>
+
+		<!--  Strictly experimental on ffmpeg. Dont have libfaac for now -->
+		<codec>aac</codec>
+
+		<!-- Encode only -->
+		<codec>libmp3lame</codec>
+		
+		<codec>mp3</codec>
+
+		<!-- Encode only -->
+		<codec>libvorbis</codec>
+
+		
+		<!--  Need externally compiled library for libfaac - TODO. Prefer this over aac. -->
+		<!-- 
+			<codec>aac</codec>
+ 		-->
+		
+		<!--  pcm_s16le and pcm_s16be are for mpeg2 audio if needed -->
+		<codec>pcm_s16be</codec>
+		<codec>pcm_s16le</codec>
+		
+		<!-- Can be used for 3gp or some old android -? -->
+		<codec>libopencore_amrnb</codec>
+	
+	</audioCodecs>
+
+	<videoCodecs>
+		<!--  Decode only -->
+		<codec>vp6</codec>
+
+		<!--  Encode only -->
+		<codec>libx264</codec>
+
+		<!--  Encode only -->
+		<codec>libtheora</codec>
+
+		<codec>wmv2</codec>
+		<codec>msmpeg4</codec>
+		<codec>h263</codec>
+		<codec>mpeg4</codec>
+		<codec>libvpx</codec>
+		<codec>mpeg2video</codec>
+		<codec>flv</codec>
+	
+	</videoCodecs>
+
+</media>
