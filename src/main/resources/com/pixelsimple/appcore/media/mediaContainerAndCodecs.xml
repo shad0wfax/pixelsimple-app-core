@@ -28,37 +28,54 @@
 	
 	<audioCodecs>
 	
-		<codec>wmav2</codec>
-		<codec>ac3</codec>
-		<codec>flac</codec>
-
-		<!--  Strictly experimental on ffmpeg. Dont have libfaac for now -->
-		<codec>aac</codec>
-
-		<!-- Encode only -->
-		<codec>libmp3lame</codec>
-		
-		<codec>mp3</codec>
-
-		<!-- Encode only -->
-		<codec>libvorbis</codec>
-
-		
-		<!--  Need externally compiled library for libfaac - TODO. Prefer this over aac. -->
-		<!-- 
-			<codec>aac</codec>
- 		-->
-		
-		<!--  pcm_s16le and pcm_s16be are for mpeg2 audio if needed -->
-		<codec>pcm_s16be</codec>
-		<codec>pcm_s16le</codec>
-		
-		<!-- Can be used for 3gp or some old android -? -->
-		<codec>libopencore_amrnb</codec>
+		<codec category="wmv">
+			<codec name="wmav2" decode="true" encode="true" provider="ffmpeg" />
+		</codec>
 	
+		<codec category="ac3">
+			<codec name="ac3" decode="true" encode="true" provider="ffmpeg" />
+		</codec>
+
+		<codec category="flac">
+			<codec name="flac" decode="true" encode="true" provider="ffmpeg" />
+		</codec>
+
+
+		<codec category="aac">
+			<codec name="aac" decode="true" encode="true" provider="ffmpeg" additionalParameters="-strict experimental"/>
+			<!-- At this point its not available, but when we do, it should be the preferred codec 
+				<codec name="libfaac" decode="true" encode="true" provider="libfaac??" />
+			-->
+		</codec>
+
+		<codec category="mp3">
+			<codec name="libmp3lame" decode="false" encode="true" provider="ffmpeg" />
+			<codec name="mp3" decode="true" encode="false" provider="ffmpeg" />
+		</codec>
+
+		<codec category="vorbis">
+			<codec name="libvorbis" decode="false" encode="true" provider="ffmpeg" />
+			<codec name="vorbis" decode="true" encode="true" provider="ffmpeg" />
+		</codec>
+
+		<!-- Can be used for 3gp or some old android -? -->
+		<codec category="3gp">
+			<codec name="libopencore_amrnb" decode="true" encode="true" provider="ffmpeg" />
+		</codec>
+
+		<codec category="mpeg2">
+			<codec name="pcm_s16be" decode="true" encode="true" provider="ffmpeg" />
+			<codec name="pcm_s16le" decode="true" encode="true" provider="ffmpeg" />
+		</codec>
+
 	</audioCodecs>
 
 	<videoCodecs>
+	
+		<codec category="vp6">
+			<codec name="vp6" decode="true" encode="false" provider="ffmpeg" />
+		</codec>
+	
 		<!--  Decode only -->
 		<codec>vp6</codec>
 
