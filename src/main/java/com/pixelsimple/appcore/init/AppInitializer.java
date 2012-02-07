@@ -15,11 +15,10 @@ import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 import com.pixelsimple.appcore.binlib.ffprobe.FfprobeConfig;
 import com.pixelsimple.appcore.env.Environment;
 import com.pixelsimple.appcore.env.EnvironmentImpl;
-import com.pixelsimple.appcore.media.AudioCodecs;
+import com.pixelsimple.appcore.media.Codecs;
 import com.pixelsimple.appcore.media.ContainerFormats;
 import com.pixelsimple.appcore.media.MediaInfoParserFactory;
 import com.pixelsimple.appcore.media.Profile;
-import com.pixelsimple.appcore.media.VideoCodecs;
 import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
@@ -111,14 +110,12 @@ public class AppInitializer {
 	 */
 	private void initContainersAndCodecs(Registry registry) throws Exception {
 		ContainerFormats containerFormats = new ContainerFormats();
-		AudioCodecs audioCodecs = new AudioCodecs();
-		VideoCodecs videoCodecs = new VideoCodecs();
-		MediaInfoParserFactory.parseContainerAndCodecs(containerFormats, audioCodecs, videoCodecs);
+		Codecs codecs = new Codecs();
+		MediaInfoParserFactory.parseContainerAndCodecs(containerFormats, codecs);
 		
 		// Load these objects up in registry
 		registry.register(Registrable.SUPPORTED_CONTAINER_FORMATS, containerFormats);
-		registry.register(Registrable.SUPPORTED_AUDIO_CODECS, audioCodecs);
-		registry.register(Registrable.SUPPORTED_VIDEO_CODECS, videoCodecs);
+		registry.register(Registrable.SUPPORTED_CODECS, codecs);
 	}
 
 	/**

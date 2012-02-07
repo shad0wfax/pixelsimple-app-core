@@ -28,8 +28,7 @@ import org.w3c.dom.NodeList;
 public class MediaInfoParserFactory {
 	private static final Logger LOG = LoggerFactory.getLogger(MediaInfoParserFactory.class);
 	
-	public static void parseContainerAndCodecs(ContainerFormats containerFormats, AudioCodecs audioCodecs, VideoCodecs videoCodecs)
-			throws Exception {
+	public static void parseContainerAndCodecs(ContainerFormats containerFormats, Codecs codecs) throws Exception {
 		InputStream is = MediaInfoParserFactory.class.getResourceAsStream("/com/pixelsimple/appcore/media/mediaContainerAndCodecs.xml");
 		
 		try {
@@ -47,26 +46,27 @@ public class MediaInfoParserFactory {
 		    	containerFormats.addCodec(nodes.item(i).getNodeValue());
 		    }
 			
-		    nodes = (NodeList) xpath.evaluate("//audioCodecs/codec/text()", doc, XPathConstants.NODESET);		    
+		    nodes = (NodeList) xpath.evaluate("//audioCodecs/codec", doc, XPathConstants.NODESET);		    
 		    for (int i = 0; i < nodes.getLength(); i++) {
-		    	audioCodecs.addCodec(nodes.item(i).getNodeValue());
+		    	Codec codec = CodecBuilder.buildCodec(Codec.CODEC_TYPE.AUDIO, nodes.item(i));
+		    	codecs.addCodec(codec);
 		    }
 			
-		    nodes = (NodeList) xpath.evaluate("//videoCodecs/codec/text()", doc, XPathConstants.NODESET);
+		    nodes = (NodeList) xpath.evaluate("//videoCodecs/codec", doc, XPathConstants.NODESET);
 		    for (int i = 0; i < nodes.getLength(); i++) {
-		    	videoCodecs.addCodec(nodes.item(i).getNodeValue());
+		    	Codec codec = CodecBuilder.buildCodec(Codec.CODEC_TYPE.VIDEO, nodes.item(i));
+		    	codecs.addCodec(codec);
 		    }
 			
 		    LOG.debug("containerFormats supported :: {} ", containerFormats);
-		    LOG.debug("audioCodecs supported :: {} ", audioCodecs);
-		    LOG.debug("videoCodecs supported :: {} ", videoCodecs);
+		    LOG.debug("codecs supported :: {} ", codecs);
 		} finally {
 			if (is != null) {
 				is.close();
 			}
 		}
 	}
-
+	
 	public static Map<String, Profile> parseMediaProfiles() throws Exception {
 		InputStream is = MediaInfoParserFactory.class.getResourceAsStream("/com/pixelsimple/appcore/media/mediaProfiles.xml");
 		

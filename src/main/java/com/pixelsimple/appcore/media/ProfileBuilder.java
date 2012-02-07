@@ -5,6 +5,7 @@ package com.pixelsimple.appcore.media;
 
 import javax.xml.xpath.XPath;
 import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 
 import org.slf4j.Logger;
@@ -75,16 +76,39 @@ public class ProfileBuilder {
 	    	}
 	    }
 	    
-	    String audioCodec = (String) xpath.evaluate("audioCodec", xmlProfileNode, XPathConstants.STRING);
+	    addCodecs(xmlProfileNode, xpath, mediaType, profile);
+	    
+	    // Validate if the profile is fine -
+	   validate(profile);
+	    
+		return profile;
+	}
+
+	/**
+	 * @param xmlProfileNode
+	 * @param xpath
+	 * @param mediaType
+	 * @param profile
+	 * @throws XPathExpressionException
+	 */
+	private static void addCodecs(Node xmlProfileNode, XPath xpath, MediaType mediaType, Profile profile) throws Exception {
+		Codecs supportedCodecs = RegistryService.getSupportedCodecs();
+
+		String audioCodec = (String) xpath.evaluate("audioCodec", xmlProfileNode, XPathConstants.STRING);
 	    String videoCodec = (String) xpath.evaluate("videoCodec", xmlProfileNode, XPathConstants.STRING);
  
 	    if (mediaType == MediaType.AUDIO && !StringUtils.isNullOrEmpty(audioCodec)) {
 		    // Format will be: <audioCodec>mp3,libvorbis,aac,ac3</audioCodec>
 	    	// Ignore the video codecs. So we will not have any pipe separated entries. Only a comma separated list.
-	    	// Note: Order is important - it indicates priority/prefefence
-	    	String [] codecs = StringUtils.commaDelimitedListToStringArray(audioCodec);
-	    	for (String acodec : codecs) {
-	    		profile.addCodec(new Profile.ContainerSupportedCodec().addStream(StreamType.AUDIO, acodec));
+	    	// Note: Order is important - it indicates priority/preference
+	    	String [] codecsString = StringUtils.commaDelimitedListToStringArray(audioCodec);
+	    	for (String acodec : codecsString) {
+	    		Codec audioCodecSupported = supportedCodecs.findCodec(Codec.CODEC_TYPE.AUDIO, acodec);
+	    		
+	    		if (audioCodecSupported == null)
+					throw new ProfileBuilderException("Looks like the audio codec - " + acodec + " is not supported");			
+	    		
+	    		profile.addAudioOnlyCodec(audioCodecSupported);
 	    	}	    	
 	    } else if (mediaType == MediaType.VIDEO && !StringUtils.isNullOrEmpty(videoCodec)) {
 		    // Format will be: <videoCodec>webm|libx264</videoCodec>
@@ -99,23 +123,26 @@ public class ProfileBuilder {
 	    	}
 	    	for (int i = 0; i < vcodecs.length; i++) {
 	    		String vcodec = vcodecs[i];
+	    		Codec videoCodecSupported = supportedCodecs.findCodec(Codec.CODEC_TYPE.VIDEO, vcodec);
+
+	    		if (videoCodecSupported == null)
+					throw new ProfileBuilderException("Looks like the video codec - " + vcodec + " is not supported");			
+	    		
+	    		profile.addVideoCodec(videoCodecSupported);
 	    		
 	    		if (acodecs != null && acodecs.length > i) {
 	    			String [] acodecForVid = StringUtils.commaDelimitedListToStringArray(acodecs[i]);
 	    	    	for (String acodec : acodecForVid) {
-	    	    		profile.addCodec(new Profile.ContainerSupportedCodec().addStream(StreamType.AUDIO, acodec)
-	    	    			.addStream(StreamType.VIDEO, vcodec));
+	    	    		Codec audioCodecSupported = supportedCodecs.findCodec(Codec.CODEC_TYPE.AUDIO, acodec);
+	    	    		
+	    	    		if (audioCodecSupported == null)
+	    					throw new ProfileBuilderException("Looks like the audio codec - " + acodec + " is not supported");			
+	    	    		
+	    	    		profile.addAssociatedAudioCodec(videoCodecSupported, audioCodecSupported);
 	    	    	}	    	
-	    		} else {
-    	    		profile.addCodec(new Profile.ContainerSupportedCodec().addStream(StreamType.VIDEO, vcodec));
-	    		}
+	    		} 
 	    	}
 	    }
-	    
-	    // Validate if the profile is fine -
-	   validate(profile);
-	    
-		return profile;
 	}
 
 	/**
@@ -130,42 +157,23 @@ public class ProfileBuilder {
 
 		if (profile.getMediaType() == MediaType.AUDIO) {
 			// At least one audio codec should be supplied:
-			if (profile.getCodecs().size() == 0 || StringUtils.isNullOrEmpty(profile.getCodecs().get(0).getAudioCodec()))
+			if (profile.getAudioCodecs().size() <= 0)
 				throw new ProfileBuilderException("Looks like the audio codec for profile type audio is missing - " 
 					+ profile.toString());
 		} else if (profile.getMediaType() == MediaType.VIDEO) {
-			// At least one audio codec should be supplied:
-			if (profile.getCodecs().size() == 0 || StringUtils.isNullOrEmpty(profile.getCodecs().get(0).getVideoCodec()))
+			// TODO: handle the case of a profile that can say only extract audio - when supported.
+			// At least one video codec should be supplied:
+			if (profile.getVideoCodecs().size() == 0)
 				throw new ProfileBuilderException("Looks like the video codec for profile type video is missing - " 
 					+ profile.toString());
 		}
 		
-		validateCodecsAndContainerSupported(profile);
-	}
-
-	/**
-	 * @param profile
-	 */
-	private static void validateCodecsAndContainerSupported(Profile profile) {
 		ContainerFormats formats = RegistryService.getSupportedContainerFormats();
-		AudioCodecs acodecs = RegistryService.getSupportedAudioCodecs();
-		VideoCodecs vcodecs = RegistryService.getSupportedVideoCodecs();
-	
 		String format = profile.getContainerFormat();
 		
 		if (!StringUtils.isNullOrEmpty(format) && !formats.isSupported(format))
 			throw new ProfileBuilderException("Looks like the container format - " + format + " is not supported");			
-		
-		for (Profile.ContainerSupportedCodec codec : profile.getCodecs()) {
-			String acodec = codec.getAudioCodec();
-			String vcodec = codec.getVideoCodec();
-			
-			if (!StringUtils.isNullOrEmpty(acodec) && !acodecs.isSupported(acodec))
-				throw new ProfileBuilderException("Looks like the audio codec - " + acodec + " is not supported");			
-
-			if (!StringUtils.isNullOrEmpty(vcodec) && !vcodecs.isSupported(vcodec))
-				throw new ProfileBuilderException("Looks like the video codec - " + vcodec + " is not supported");			
-		}
 	}
+
 
 }

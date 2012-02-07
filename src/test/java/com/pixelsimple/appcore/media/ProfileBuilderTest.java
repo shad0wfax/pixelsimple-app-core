@@ -46,19 +46,19 @@ public class ProfileBuilderTest {
 		Node node = validVideoXmlNode();
 		Profile profile = ProfileBuilder.buildProfile(node);
 		Assert.assertEquals(profile.getId(), "Opera_10.5_high_bandwidth");
-		Assert.assertEquals(profile.getCodecs().get(0).getAudioCodec(), "libvorbis");
-		Assert.assertNotNull(profile.getCodecs().get(0).getVideoCodec());
+		Assert.assertEquals(profile.getAudioCodecs().get(0).getName(), "libvorbis");
+		Assert.assertNotNull(profile.getVideoCodecs().get(0).getName());
 		
 		node = validAudioXmlNode();
 		profile = ProfileBuilder.buildProfile(node);
-		Assert.assertEquals(profile.getCodecs().get(0).getAudioCodec(), "libvorbis");
-		Assert.assertNull(profile.getCodecs().get(0).getVideoCodec());
+		Assert.assertEquals(profile.getAudioCodecs().get(0).getName(), "libvorbis");
+		Assert.assertEquals(profile.getVideoCodecs().size(), 0);
 		
 		node = validVideoXmlNodeWithCData();
 		profile = ProfileBuilder.buildProfile(node);
 		Assert.assertEquals(profile.getId(), "Opera_10.5_high_bandwidth");
-		Assert.assertEquals(profile.getCodecs().get(0).getAudioCodec(), "libvorbis");
-		Assert.assertNotNull(profile.getCodecs().get(0).getVideoCodec());
+		Assert.assertEquals(profile.getAudioCodecs().get(0).getName(), "libvorbis");
+		Assert.assertNotNull(profile.getVideoCodecs().get(0).getName());
 		Assert.assertTrue(profile.getName().startsWith("This is a multiline \"name\""));
 		Assert.assertTrue(profile.getName().contains("<name> - !!"));
 	}

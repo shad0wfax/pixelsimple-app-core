@@ -12,7 +12,6 @@ import org.junit.Test;
 import com.pixelsimple.appcore.ApiConfigImpl;
 import com.pixelsimple.appcore.Registrable;
 import com.pixelsimple.appcore.Registry;
-import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 
 /**
  *

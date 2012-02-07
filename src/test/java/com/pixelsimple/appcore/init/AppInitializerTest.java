@@ -54,7 +54,7 @@ public class AppInitializerTest {
 		initializer.init(configs);
 		
 		// Keep track on the count here and ensure it is updated based on init code
-		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 5);
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 4);
 		
 		for (Registrable r : Registrable.values()) {
 			Assert.assertNotNull(MapRegistry.INSTANCE.fetch(r));

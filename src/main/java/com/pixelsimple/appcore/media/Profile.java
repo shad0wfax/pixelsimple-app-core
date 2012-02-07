@@ -17,8 +17,6 @@ public final class Profile {
 	private MediaType mediaType;
 	private String containerFormat;
 	private String fileExtension;
-	// Will have the order maintained. The position also determines the priority.
-	private List<ContainerSupportedCodec> codecs = new ArrayList<ContainerSupportedCodec>();  
 	private String videoBitRate;
 	private String vidoeQuality;
 	private String audioBitRate; 
@@ -26,7 +24,13 @@ public final class Profile {
 	private int maxWidth; 
 	private String frameRateFPS; 
 	private String optionalAdditionalParameters; 
-	
+
+	// Will have the order maintained. The position also determines the priority.
+	private List<VideoCodec> videoCodecs = new ArrayList<VideoCodec>();  
+	private List<AudioCodec> audioCodecs = new ArrayList<AudioCodec>();  
+	private List<Codec> videoCodecsComputed = new ArrayList<Codec>();
+	private List<Codec> audioCodecsComputed = new ArrayList<Codec>();
+
 	public Profile(MediaType mediaType) {
 		this.mediaType = mediaType;
 	}
@@ -35,75 +39,68 @@ public final class Profile {
 	private List<String> criteria = new ArrayList<String>(); 
 	
 	/**
-	 * Represents a combination of video and audio codec that is possible, with in the given containerformat.
 	 *
 	 * @author Akshay Sharma
-	 * Feb 4, 2012
+	 * Feb 7, 2012
 	 */
-	public static class ContainerSupportedCodec {
-		String videoCodec;
-		String audioCodec;
+	private class VideoCodec {
+		private Codec videoCodec;
+		// Order is important!
+		private List<Codec> associatedAudioCodecs = new ArrayList<Codec>();
 		
+		public VideoCodec(Codec videoCodec) {
+			this.videoCodec = videoCodec;
+			videoCodecsComputed.add(videoCodec);
+		}
+		
+		public VideoCodec addAudioCodec(Codec audioCodec) {
+			this.associatedAudioCodecs.add(audioCodec);
+			audioCodecsComputed.add(audioCodec);
+			return this;
+		}
+
 		/**
 		 * @return the videoCodec
 		 */
-		public String getVideoCodec() {
+		public Codec getVideoCodec() {
 			return videoCodec;
+		}
+
+		/**
+		 * @return the associatedAudioCodecs
+		 */
+		public List<Codec> getAssociatedAudioCodecs() {
+			return associatedAudioCodecs;
+		}
+		
+		@Override public String toString() {
+			return "video codec:" + this.getVideoCodec() + "and associated audio codecs :" + this.getAssociatedAudioCodecs(); 
+		}
+		
+	}
+	
+	/**
+	 *
+	 * @author Akshay Sharma
+	 * Feb 7, 2012
+	 */
+	private class AudioCodec {
+		private Codec audioCodec;
+		
+		public AudioCodec(Codec audioCodec) {
+			this.audioCodec = audioCodec;
+			audioCodecsComputed.add(audioCodec);
 		}
 
 		/**
 		 * @return the audioCodec
 		 */
-		public String getAudioCodec() {
+		public Codec getAudioCodec() {
 			return audioCodec;
 		}
 
-		protected ContainerSupportedCodec addStream(StreamType streamType, String value) {
-			if (streamType == StreamType.VIDEO) {
-				this.videoCodec = value;
-			} else if (streamType == StreamType.AUDIO) {
-				this.audioCodec= value;
-			}  
-			
-			return this;
-		}
-		
-		@Override public boolean equals(Object obj) {
-			if (obj == null || !(obj instanceof ContainerSupportedCodec))
-				return false;
-			ContainerSupportedCodec codec = (ContainerSupportedCodec) obj;
-			
-			if (codec == this)
-				return true;
-			
-			if ((codec.getAudioCodec() == null && this.getAudioCodec() != null) ||
-					(this.getAudioCodec() == null && codec.getAudioCodec() != null))
-				return false;
-			
-			if ((codec.getVideoCodec() == null && this.getVideoCodec() != null) ||
-					(this.getVideoCodec() == null && codec.getVideoCodec() != null))
-				return false;
-			
-			// Ok each pair is either null or not
-			if (((codec.getAudioCodec() == this.getAudioCodec()) || (codec.getAudioCodec().equalsIgnoreCase(this.getAudioCodec())))
-					&& ((codec.getVideoCodec() == this.getVideoCodec()) || (codec.getVideoCodec().equalsIgnoreCase(this.getVideoCodec()))))
-				return true;
-			
-			return false;
-		}
-		
-		/**
-		 * Dumb implementation - painful Java :).
-		 */
-		@Override public int hashCode() {
-			String fullCodecString = this.getAudioCodec() != null ? this.getAudioCodec() : "-" 
-				+ ":" + this.getVideoCodec() != null ? this.getVideoCodec() : "-";
-			
-			return fullCodecString.hashCode();
-		}
-		
 		@Override public String toString() {
-			return "video-codec:" + this.videoCodec + "_audio-codec:" + this.audioCodec; 
+			return "audio codec:" + this.getAudioCodec(); 
 		}
 	}
 	
@@ -170,21 +167,70 @@ public final class Profile {
 		this.fileExtension = fileExtension;
 	}
 
-	/**
-	 * @return the codecs
-	 */
-	public List<ContainerSupportedCodec> getCodecs() {
-		return codecs;
-	}
-
-	/**
-	 * @param codecs the codecs to set
-	 */
-	protected Profile addCodec(ContainerSupportedCodec codec) {
-		this.codecs.add(codec);
+	protected Profile addAudioOnlyCodec(Codec codec) {
+		if (this.mediaType != MediaType.AUDIO)
+			throw new IllegalStateException("An audio only codec can be added only if the media is of type Audio. " +
+				"Use adding Audio through an associated video codec if the media is of type video");
+		AudioCodec audioCodec = new AudioCodec(codec);
+		this.audioCodecs.add(audioCodec);
 		return this;
 	}
+	
+	protected Profile addVideoCodec(Codec codec) {
+		if (this.mediaType != MediaType.VIDEO)
+			throw new IllegalStateException("A video only codec can be added only if the media is of type Video. " +
+				"Use adding Audio with addAudioOnlyCodec() for media type Audio.");
 
+		VideoCodec videoCodec = new VideoCodec(codec);		
+		this.videoCodecs.add(videoCodec);
+		return this;
+	}
+	
+	protected Profile addAssociatedAudioCodec(Codec videoCodec, Codec audioCodec) {
+		VideoCodec vidCodec = null;
+		for (VideoCodec vcodec : this.videoCodecs) {
+			
+			if (vcodec.getVideoCodec().equals(videoCodec)) {
+				vidCodec = vcodec;
+				break;
+			}
+		}
+		
+		if (vidCodec != null) {
+			vidCodec.addAudioCodec(audioCodec);
+		} else {
+			throw new IllegalStateException("Looks like the videoCodec has not been added to the profile yet.");
+			// TODO: consider adding it videoCodec chain??
+		}
+
+		return this;
+	}
+	
+	public List<Codec> getVideoCodecs() {
+		return this.videoCodecsComputed;
+	}
+	
+	public List<Codec> getAudioCodecs() {
+		return this.audioCodecsComputed;
+	}
+	
+	public List<Codec> getAssociatedAudioCodec(Codec videoCodec) {
+		
+		if (videoCodec.getCodecType() != Codec.CODEC_TYPE.AUDIO)
+			throw new IllegalStateException("Only a video codec can have an associated list of Audio codecs for a profile");
+		
+		List<Codec> associatedCodecs = null;
+		for (VideoCodec vcodec : this.videoCodecs) {
+			
+			if (vcodec.getVideoCodec().equals(videoCodec)) {
+				associatedCodecs = vcodec.getAssociatedAudioCodecs();
+				break;
+			}
+		}
+		
+		return associatedCodecs;
+	}
+	
 	/**
 	 * @return the videoBitRate
 	 */
@@ -318,7 +364,8 @@ public final class Profile {
 	}
 
 	@Override public String toString() {
-		return "\nid:" + this.getId() + "::Container:" + this.getContainerFormat() + "::Codecs supported:" + this.getCodecs();  
+		return "\nid:" + this.getId() + "::Container:" + this.getContainerFormat() + "::Video Codecs supported:" + this.videoCodecs
+				+ "\t:: audio codecs supported:" + this.audioCodecs;  
 	}
 	
 }

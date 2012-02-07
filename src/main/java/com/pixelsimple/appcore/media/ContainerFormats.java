@@ -16,11 +16,11 @@ public class ContainerFormats {
 	private List<String> containers = new ArrayList<String>();
 	
 	public void addCodec(String containerName) {
-		this.containers.add(containerName.toLowerCase());
+		this.containers.add(containerName.trim().toLowerCase());
 	}
 	
 	public boolean isSupported(String containerName) {
-		return this.containers.contains(containerName.toLowerCase());
+		return this.containers.contains(containerName.trim().toLowerCase());
 	}
 	
 	public String toString() {

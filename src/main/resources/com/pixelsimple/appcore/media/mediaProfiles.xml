@@ -68,7 +68,7 @@
 			<container>mp4</container>
 			<fileExtension>m4v</fileExtension>
 			<videoCodec>libx264|mpeg4</videoCodec>
-			<audioCodec>aac,ac3|aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3|aac,ac3,libmp3lame</audioCodec>
 			<videoBitRate>700k</videoBitRate>
 			<audioBitRate>160k</audioBitRate>
 			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
@@ -85,7 +85,7 @@
 			<container>mp4</container>
 			<fileExtension>m4v</fileExtension>
 			<videoCodec>libx264|mpeg4</videoCodec>
-			<audioCodec>aac,ac3|aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3|aac,ac3,libmp3lame</audioCodec>
 			<videoBitRate>1200k</videoBitRate>
 			<audioBitRate>128k</audioBitRate>
 			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
@@ -102,7 +102,7 @@
 			<container>mp4</container>
 			<fileExtension>m4v</fileExtension>
 			<videoCodec>libx264|mpeg4</videoCodec>
-			<audioCodec>aac,ac3|aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3|aac,ac3,libmp3lame</audioCodec>
 			<videoBitRate>1024k</videoBitRate>
 			<audioBitRate>160k</audioBitRate>
 			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
@@ -119,7 +119,7 @@
 			<container>mp4</container>
 			<fileExtension>m4v</fileExtension>
 			<videoCodec>libx264|mpeg4</videoCodec>
-			<audioCodec>aac,ac3|aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3|aac,ac3,libmp3lame</audioCodec>
 			<videoBitRate>1024k</videoBitRate>
 			<audioBitRate>160k</audioBitRate>
 			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
@@ -136,7 +136,7 @@
 			<container>mp4</container>
 			<fileExtension>m4v</fileExtension>
 			<videoCodec>libx264|mpeg4</videoCodec>
-			<audioCodec>aac,ac3|aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3|aac,ac3,libmp3lame</audioCodec>
 			<vidoeQuality>3</vidoeQuality>
 			<audioBitRate>160k</audioBitRate>
 			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
@@ -153,7 +153,7 @@
 			<container>mp4</container>
 			<fileExtension>m4v</fileExtension>
 			<videoCodec>libx264|mpeg4</videoCodec>
-			<audioCodec>aac,ac3|aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3|aac,ac3,libmp3lame</audioCodec>
 			<videoBitRate></videoBitRate>
 			<vidoeQuality>3</vidoeQuality>
 			<audioBitRate>160k</audioBitRate>
@@ -172,7 +172,7 @@
 			<container>flv</container>
 			<fileExtension>flv</fileExtension>
 			<videoCodec>libx264|flv</videoCodec>
-			<audioCodec>aac,mp3|mp3,aac</audioCodec>
+			<audioCodec>aac,libmp3lame|libmp3lame,aac</audioCodec>
 			<videoBitRate></videoBitRate>
 			<vidoeQuality>2</vidoeQuality>
 			<audioBitRate>160k</audioBitRate>
@@ -190,7 +190,7 @@
 			<container>f4v</container>
 			<fileExtension>f4v</fileExtension>
 			<videoCodec>libx264</videoCodec>
-			<audioCodec>mp3,aac</audioCodec>
+			<audioCodec>libmp3lame,aac</audioCodec>
 			<!--  override bitrate if needed in the coding algo -->
 			<videoBitRate>900k</videoBitRate>
 			<vidoeQuality></vidoeQuality>
@@ -213,7 +213,7 @@
 			<fileExtension>mp4</fileExtension>
 			<!-- Lets not add WebM as the user should have installed it for IE9. So just H.264 -->
 			<videoCodec>libx264</videoCodec>
-			<audioCodec>aac,mp3</audioCodec>
+			<audioCodec>aac,libmp3lame</audioCodec>
 			<videoBitRate></videoBitRate>
 			<vidoeQuality>3</vidoeQuality>
 			<audioBitRate>160k</audioBitRate>
@@ -285,7 +285,7 @@
 			<container>mp4</container>
 			<fileExtension>mp4</fileExtension>
 			<videoCodec>libx264</videoCodec>
-			<audioCodec>aac,mp3</audioCodec>
+			<audioCodec>aac,libmp3lame</audioCodec>
 			<videoBitRate></videoBitRate>
 			<vidoeQuality>3</vidoeQuality>
 			<audioBitRate>160k</audioBitRate>
@@ -303,7 +303,7 @@
 			<container>mp4</container>
 			<fileExtension>mp4</fileExtension>
 			<videoCodec>libx264</videoCodec>
-			<audioCodec>aac,ac3,mp3</audioCodec>
+			<audioCodec>aac,ac3,libmp3lame</audioCodec>
 			<videoBitRate></videoBitRate>
 			<vidoeQuality>3</vidoeQuality>
 			<audioBitRate>160k</audioBitRate>

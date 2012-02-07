@@ -5,10 +5,9 @@ package com.pixelsimple.appcore;
 
 import java.util.Map;
 
-import com.pixelsimple.appcore.media.AudioCodecs;
+import com.pixelsimple.appcore.media.Codecs;
 import com.pixelsimple.appcore.media.ContainerFormats;
 import com.pixelsimple.appcore.media.Profile;
-import com.pixelsimple.appcore.media.VideoCodecs;
 import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
@@ -34,12 +33,8 @@ public final class RegistryService {
 		return (ContainerFormats) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CONTAINER_FORMATS);
 	}
 
-	public static AudioCodecs getSupportedAudioCodecs() {
-		return (AudioCodecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_AUDIO_CODECS);
-	}
-
-	public static VideoCodecs getSupportedVideoCodecs() {
-		return (VideoCodecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_VIDEO_CODECS);
+	public static Codecs getSupportedCodecs() {
+		return (Codecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CODECS);
 	}
 
 	@SuppressWarnings("unchecked")

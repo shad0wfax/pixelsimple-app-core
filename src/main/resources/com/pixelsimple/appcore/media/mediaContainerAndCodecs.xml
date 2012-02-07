@@ -27,71 +27,43 @@
 	</containerFormats>
 	
 	<audioCodecs>
-	
-		<codec category="wmv">
-			<codec name="wmav2" decode="true" encode="true" provider="ffmpeg" />
-		</codec>
-	
-		<codec category="ac3">
-			<codec name="ac3" decode="true" encode="true" provider="ffmpeg" />
-		</codec>
-
-		<codec category="flac">
-			<codec name="flac" decode="true" encode="true" provider="ffmpeg" />
-		</codec>
-
-
-		<codec category="aac">
-			<codec name="aac" decode="true" encode="true" provider="ffmpeg" additionalParameters="-strict experimental"/>
-			<!-- At this point its not available, but when we do, it should be the preferred codec 
-				<codec name="libfaac" decode="true" encode="true" provider="libfaac??" />
-			-->
-		</codec>
-
-		<codec category="mp3">
-			<codec name="libmp3lame" decode="false" encode="true" provider="ffmpeg" />
-			<codec name="mp3" decode="true" encode="false" provider="ffmpeg" />
-		</codec>
-
-		<codec category="vorbis">
-			<codec name="libvorbis" decode="false" encode="true" provider="ffmpeg" />
-			<codec name="vorbis" decode="true" encode="true" provider="ffmpeg" />
-		</codec>
-
-		<!-- Can be used for 3gp or some old android -? -->
-		<codec category="3gp">
-			<codec name="libopencore_amrnb" decode="true" encode="true" provider="ffmpeg" />
-		</codec>
-
-		<codec category="mpeg2">
-			<codec name="pcm_s16be" decode="true" encode="true" provider="ffmpeg" />
-			<codec name="pcm_s16le" decode="true" encode="true" provider="ffmpeg" />
-		</codec>
-
+		<!--  Format of the codec tag:
+				<codec name="CODEC_NAME[Ex:libmp3lame]" decode="true" encode="true" provider="LIBRARY_PROVIDER[EX:ffmpeg]" strict="STRICTNESS[Ex:experimental(needed for ffmpeg)] />
+		 -->
+		<codec name="wmav2" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="ac3" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="flac" decode="true" encode="true" provider="ffmpeg" />
+		<!--  Strictly experimental on ffmpeg. Dont have libfaac for now -->
+		<codec name="aac" decode="true" encode="true" provider="ffmpeg" strict="experimental" />
+		<!-- At this point its not available, but when we do, it should be the preferred codec 
+			<codec name="libfaac" decode="true" encode="true" provider="libfaac??" />
+		-->
+		<codec name="libmp3lame" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libvorbis" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libopencore_amrnb" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="pcm_s16be" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="pcm_s16le" decode="true" encode="true" provider="ffmpeg" />
+		
 	</audioCodecs>
 
 	<videoCodecs>
 	
-		<codec category="vp6">
-			<codec name="vp6" decode="true" encode="false" provider="ffmpeg" />
-		</codec>
-	
-		<!--  Decode only -->
-		<codec>vp6</codec>
+		<!--  Decode only. So useful for just extracting images/thumbnails -->
+		<codec name="vp6" decode="true" encode="false" provider="ffmpeg" />
 
 		<!--  Encode only -->
-		<codec>libx264</codec>
+		<codec name="libx264" decode="false" encode="true" provider="ffmpeg" />
 
 		<!--  Encode only -->
-		<codec>libtheora</codec>
+		<codec name="libtheora" decode="false" encode="true" provider="ffmpeg" />
 
-		<codec>wmv2</codec>
-		<codec>msmpeg4</codec>
-		<codec>h263</codec>
-		<codec>mpeg4</codec>
-		<codec>libvpx</codec>
-		<codec>mpeg2video</codec>
-		<codec>flv</codec>
+		<codec name="wmv2" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="msmpeg4" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="h263" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="mpeg4" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="libvpx" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="mpeg2video" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="flv" decode="true" encode="true" provider="ffmpeg" />
 	
 	</videoCodecs>
 
