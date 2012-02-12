@@ -20,7 +20,7 @@ public class Bootstrap {
 	private static final Logger LOG = LoggerFactory.getLogger(Bootstrap.class);
 	
 	/**
-	 * TODO: How to prevent multiple instances running? Error out if Webme is already running??
+	 * TODO: How to prevent multiple instances running? Error out if nova is already running??
 	 * @param args
 	 */
 	public static void main(String[] args) {

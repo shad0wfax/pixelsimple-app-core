@@ -35,8 +35,9 @@ public class CodecBuilder {
 	    XPath xpath = factory.newXPath();
 
 	    String name = (String) xpath.evaluate("@name", xmlCodecNode, XPathConstants.STRING);
-	    Boolean decode = (Boolean) xpath.evaluate("@decode", xmlCodecNode, XPathConstants.BOOLEAN);
-	    Boolean encode = (Boolean) xpath.evaluate("@encode", xmlCodecNode, XPathConstants.BOOLEAN);
+	    String category = (String) xpath.evaluate("@category", xmlCodecNode, XPathConstants.STRING);
+	    String decode = (String) xpath.evaluate("@decode", xmlCodecNode, XPathConstants.STRING);
+	    String encode = (String) xpath.evaluate("@encode", xmlCodecNode, XPathConstants.STRING);
 	    String provider = (String) xpath.evaluate("@provider", xmlCodecNode, XPathConstants.STRING);
 	    String strict = (String) xpath.evaluate("@strict", xmlCodecNode, XPathConstants.STRING);
 
@@ -46,10 +47,11 @@ public class CodecBuilder {
 			throw new CodecBuilderException("The codec name is a required attribute.");
 
 		Codec codec = Codec.create(codecType, name);
+		codec.setCategory(category);
 		codec.setProvider(provider);
 		codec.setStrict(strict);
-		codec.setSupportsDecoding(decode != null ? decode.booleanValue() : false);
-		codec.setSupportsEncoding(encode != null ? encode.booleanValue() : false);
+		codec.setSupportsDecoding(decode != null ? Boolean.valueOf(decode).booleanValue() : false);
+		codec.setSupportsEncoding(encode != null ? Boolean.valueOf(encode).booleanValue() : false);
 	
 		return codec;
 	}

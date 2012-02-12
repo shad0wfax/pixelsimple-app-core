@@ -14,6 +14,9 @@
 			<!- -  A file extension to use. Only one name can be give (sometimes its possible to use more than one - ex: mov/mp4/m4v, but for simplicity just one can be chosen. - ->
 			<fileExtension></fileExtension>
 
+			<!- -  An optional attribute to be used if the transcoding library provider (ffmpeg) does not detect file format automatically and fails. Ffmpeg adds "-f fileFormat" - ->
+			<fileFormat></fileFormat>
+
 			<!- -  Pipe (|) separated, ordered (first has higher priority) list of words - ->
 			<videoCodec></videoCodec>
 
@@ -21,7 +24,7 @@
 			One video codec combination could have one or more audio codec. If the same audio codec is applicable for two video codecs, repeat them with a pipe (For clarity). - ->
 			<audioCodec></audioCodec>
 
-			<!- - Optional - To be given if quality parameter is not supplied. This is preferred when we are using Constant Bit Rate (CBR)  - ->
+			<!- - Optional - Supply as Xk, where x is a number. Ex: 1200k. To be given if quality parameter is not supplied. This is preferred when we are using Constant Bit Rate (CBR)  - ->
 			<videoBitRate></videoBitRate>
 
 			<!- - Optional - Can be supplied if the videoBitRate is not supplied. This will guarantee a constant quality over VBR.
@@ -33,9 +36,12 @@
 			<aspectRatio></aspectRatio>
 			<!- - Optional - should be in pixels: ex: 1024. This will be used to compute the size for input as follows: height = maxWidth * aspect-ration. - ->
 			<maxWidth></maxWidth>
-			<!- -  recommended, but can be kept as source. Expressed as 29.97 or 30000/1001 - ->
+			<!- -  optional, but can be kept as source. Expressed as 29.97 or 30000/1001 - ->
 			<frameRateFPS></frameRateFPS>
-			
+			<!- -  Optional, but can be kept as source. Expressed as a number: 8000  44100 etc..- ->
+			<audioSampleRate></audioSampleRate>
+
+			<!- - Additional params that can be directly used with the transcoding provider (ffmpeg). 			
 			<additionalParameters></additionalParameters>
 
 			<!- - Our own/custom nomenclature that defines a set of criteria comma separated. This will help match the profile to a client input better. - ->
@@ -50,13 +56,16 @@
 			<type>video</type>
 			<container>mp4</container>
 			<fileExtension>mp4</fileExtension>
-			<audioCodec>aac,ac3</audioCodec>
 			<videoCodec>libx264</videoCodec>
+			<audioCodec>aac,ac3</audioCodec>
 			<videoBitRate>SAME_AS_SOURCE</videoBitRate>
 			<audioBitRate>SAME_AS_SOURCE</audioBitRate>
 			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
+			<!-- Unfortunately not yet supported by our version of ffmpeg - fix  
+			<additionalParameters> -moov_size 10 </additionalParameters>
+			-->
 			<additionalParameters></additionalParameters>
 			<criteria>apple,generic</criteria>
 		</profile>	
@@ -130,6 +139,26 @@
 		</profile>	
 
 		<profile>
+			<id>smartphone</id>
+			<name>Smartphones that support multimedia. Not Iphone/Android. but the other ones.</name>
+			<type>video</type>
+			<container>3gp</container>
+			<fileExtension>3gp</fileExtension>
+			<videoCodec>h263</videoCodec>
+			<audioCodec>libopencore_amrnb</audioCodec>
+			<videoBitRate></videoBitRate>
+			<vidoeQuality>3</vidoeQuality>
+			<audioBitRate>48k</audioBitRate>
+			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
+			<maxWidth></maxWidth>
+			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
+			<audioSampleRate>8000</audioSampleRate>
+			<!-- Direct ffmpeg param! For h263/3gp need to use mono channel, at 8000hz audio sample and size of 352x288 -->
+			<additionalParameters>-ac 1 -s 352x288</additionalParameters>
+			<criteria>smartphone,handheld,3gpp</criteria>
+		</profile>	
+
+		<profile>
 			<id>appletv1</id>
 			<name>Apple TV 1</name>
 			<type>video</type>
@@ -187,8 +216,8 @@
 			<id>IE_6_7_8_low_bandwidth</id>
 			<name>Internet Explorer 6, 7 and 8 on low bandwidth. Support only via Flash.</name>
 			<type>video</type>
-			<container>f4v</container>
-			<fileExtension>f4v</fileExtension>
+			<container>flv</container>
+			<fileExtension>flv</fileExtension>
 			<videoCodec>libx264</videoCodec>
 			<audioCodec>libmp3lame,aac</audioCodec>
 			<!--  override bitrate if needed in the coding algo -->
@@ -221,7 +250,7 @@
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
 			<additionalParameters></additionalParameters>
-			<criteria>IE9+,Desktop,PC,Windows</criteria>
+			<criteria>IE9+,Desktop,PC,Windows,html5</criteria>
 		</profile>	
 
 		<profile>
@@ -239,7 +268,7 @@
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
 			<additionalParameters></additionalParameters>
-			<criteria>Firefor4+,Desktop,PC,Windows,Mac</criteria>
+			<criteria>Firefor4+,Desktop,PC,Windows,Mac,html5</criteria>
 		</profile>	
 
 		<profile>
@@ -275,7 +304,7 @@
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
 			<additionalParameters></additionalParameters>
-			<criteria>Chrome6,Desktop,PC,Windows,Mac</criteria>
+			<criteria>Chrome6,Desktop,PC,Windows,Mac,html5</criteria>
 		</profile>	
 
 		<profile>
@@ -293,7 +322,7 @@
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
 			<additionalParameters></additionalParameters>
-			<criteria>Chrome5,Desktop,PC,Windows,Mac</criteria>
+			<criteria>Chrome5,Desktop,PC,Windows,Mac,html5</criteria>
 		</profile>	
 
 		<profile>
@@ -311,7 +340,7 @@
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
 			<additionalParameters></additionalParameters>
-			<criteria>Safari,Desktop,PC,Windows,Mac</criteria>
+			<criteria>Safari,Desktop,PC,Windows,Mac,html5</criteria>
 		</profile>	
 
 		<profile>
@@ -347,9 +376,84 @@
 			<maxWidth>SAME_AS_SOURCE</maxWidth>
 			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
 			<additionalParameters></additionalParameters>
-			<criteria>Opera10.6,Desktop,PC,Windows,Mac</criteria>
+			<criteria>Opera10.6,Desktop,PC,Windows,Mac,html5</criteria>
 		</profile>	
 
+		<!-- For testing: -->
+
+		<profile>
+			<id>akshay_test1</id>
+			<name>Testing for akshay</name>
+			<type>video</type>
+			<container>avi</container>
+			<fileExtension>avi</fileExtension>
+			<videoCodec>msmpeg4</videoCodec>
+			<audioCodec>libmp3lame</audioCodec>
+			<videoBitRate></videoBitRate>
+			<vidoeQuality>3</vidoeQuality>
+			<audioBitRate>160k</audioBitRate>
+			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
+			<maxWidth>480</maxWidth>
+			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
+			<additionalParameters></additionalParameters>
+			<criteria>windowsmedia,zune</criteria>
+		</profile>	
+
+		<profile>
+			<id>akshay_test2</id>
+			<name>Testing for akshay</name>
+			<type>video</type>
+			<container>divx</container>
+			<fileExtension>divx</fileExtension>
+			<fileFormat>avi</fileFormat>
+			<videoCodec>mpeg4</videoCodec>
+			<audioCodec>ac3</audioCodec>
+			<videoBitRate></videoBitRate>
+			<vidoeQuality>3</vidoeQuality>
+			<audioBitRate>160k</audioBitRate>
+			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
+			<maxWidth>480</maxWidth>
+			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
+			<additionalParameters></additionalParameters>
+			<criteria>windowsmedia,zune</criteria>
+		</profile>	
+
+		<profile>
+			<id>akshay_test3</id>
+			<name>Testing for akshay</name>
+			<type>video</type>
+			<container>ogg</container>
+			<fileExtension>ogg</fileExtension>
+			<fileFormat>ogg</fileFormat>
+			<videoCodec>libtheora</videoCodec>
+			<audioCodec>flac</audioCodec>
+			<videoBitRate></videoBitRate>
+			<vidoeQuality>3</vidoeQuality>
+			<audioBitRate>160k</audioBitRate>
+			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
+			<maxWidth>480</maxWidth>
+			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
+			<additionalParameters></additionalParameters>
+			<criteria>flac,ogg</criteria>
+		</profile>	
+
+		<profile>
+			<id>akshay_test4</id>
+			<name>Testing for akshay</name>
+			<type>video</type>
+			<container>mp4</container>
+			<fileExtension>mp4</fileExtension>
+			<videoCodec>mpeg2video</videoCodec>
+			<audioCodec>ac3</audioCodec>
+			<videoBitRate></videoBitRate>
+			<vidoeQuality>3</vidoeQuality>
+			<audioBitRate>160k</audioBitRate>
+			<aspectRatio>SAME_AS_SOURCE</aspectRatio>
+			<maxWidth>480</maxWidth>
+			<frameRateFPS>SAME_AS_SOURCE</frameRateFPS>
+			<additionalParameters></additionalParameters>
+			<criteria>mpeg2,ac3</criteria>
+		</profile>	
 
 	</profiles>
 </media>

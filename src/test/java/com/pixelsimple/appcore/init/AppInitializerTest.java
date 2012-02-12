@@ -12,6 +12,7 @@ import org.junit.Test;
 
 import com.pixelsimple.appcore.ApiConfig;
 import com.pixelsimple.appcore.Registrable;
+import com.pixelsimple.appcore.Registry;
 import com.pixelsimple.appcore.RegistryService;
 import com.pixelsimple.appcore.registry.MapRegistry;
 import com.pixelsimple.commons.util.OSUtils;
@@ -43,6 +44,40 @@ public class AppInitializerTest {
 	}
 
 	/**
+	 * Test method for {@link com.pixelsimple.appcore.init.AppInitializer#init(java.util.Map)}.
+	 */
+	@Test
+	public void addModuleInitializers() throws Exception {
+		Map<String, String> configs = getConfig();
+		
+		AppInitializer initializer = new AppInitializer();
+		initializer.init(configs);
+		int size = MapRegistry.INSTANCE.fetchAllValues().size();
+		Assert.assertEquals(size, 3);
+		
+		initializer = new AppInitializer();
+		initializer.addModuleInitializable(new Initializable() {
+			
+			@Override
+			public void initialize(Registry registry) throws Exception {
+				registry.register(Registrable.MEDIA_PROFILES, "abc");
+			}
+			
+			@Override
+			public void deinitialize(Registry registry) throws Exception {
+				registry.remove(Registrable.MEDIA_PROFILES);
+			}
+		});
+		initializer.init(configs);
+		
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), size + 1);
+		Assert.assertEquals(MapRegistry.INSTANCE.fetch(Registrable.MEDIA_PROFILES), "abc");
+		
+		initializer.shutdown();
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 0);
+	}
+
+	/**
 	 * A test to ensure that as we add more items to registry after init, they are tested here :-)
 	 * Test method for {@link com.pixelsimple.appcore.init.AppInitializer#init(java.util.Map)}.
 	 */
@@ -54,11 +89,14 @@ public class AppInitializerTest {
 		initializer.init(configs);
 		
 		// Keep track on the count here and ensure it is updated based on init code
-		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 4);
-		
-		for (Registrable r : Registrable.values()) {
-			Assert.assertNotNull(MapRegistry.INSTANCE.fetch(r));
-		}
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 3);
+
+		// Can't do this any longer - since modules register their own stuff.
+//		for (Registrable r : Registrable.values()) {
+//			Assert.assertNotNull(MapRegistry.INSTANCE.fetch(r));
+//		}
+		initializer.shutdown();
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 0);
 	}
 
 	private Map<String, String> getConfig() {

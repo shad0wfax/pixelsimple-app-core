@@ -3,7 +3,7 @@
  */
 package com.pixelsimple.appcore.media;
 
-import junit.framework.Assert;
+import com.pixelsimple.commons.util.Assert;
 
 
 /**
@@ -15,6 +15,7 @@ public class Codec {
 	public static enum CODEC_TYPE {VIDEO, AUDIO};	
 	
 	private String name;
+	private String category;
 	private CODEC_TYPE codecType;
 	private boolean supportsDecoding;
 	private boolean supportsEncoding;
@@ -25,12 +26,12 @@ public class Codec {
 		return new Codec(codecType, codec);
 	}
 	
-	public Codec(CODEC_TYPE codecType, String codec) {
-		Assert.assertNotNull("A valid name type needs to be supplied", codecType);
-		Assert.assertNotNull("A valid name needs to be supplied", codec);
+	public Codec(CODEC_TYPE codecType, String name) {
+		Assert.notNull(codecType, "A valid name type needs to be supplied");
+		Assert.notNull(name, "A valid name needs to be supplied");
 
 		this.codecType = codecType;
-		this.name = codec.trim().toLowerCase();
+		this.name = name.trim().toLowerCase();
 	}
 	
 	/**
@@ -91,7 +92,7 @@ public class Codec {
 	/**
 	 * @param decoder the decoder to set
 	 */
-	public void setSupportsDecoding(boolean supportsDecoding) {
+	protected void setSupportsDecoding(boolean supportsDecoding) {
 		this.supportsDecoding = supportsDecoding;
 	}
 
@@ -119,7 +120,7 @@ public class Codec {
 	/**
 	 * @param provider the provider to set
 	 */
-	public void setProvider(String provider) {
+	protected void setProvider(String provider) {
 		this.provider = provider;
 	}
 
@@ -133,8 +134,22 @@ public class Codec {
 	/**
 	 * @param strict the strict to set
 	 */
-	public void setStrict(String strict) {
+	protected void setStrict(String strict) {
 		this.strict = strict;
+	}
+
+	/**
+	 * @return the category
+	 */
+	public String getCategory() {
+		return category;
+	}
+
+	/**
+	 * @param category the category to set
+	 */
+	protected void setCategory(String category) {
+		this.category = category;
 	}
 
 }

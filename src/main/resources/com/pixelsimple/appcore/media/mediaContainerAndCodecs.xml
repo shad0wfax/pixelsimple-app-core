@@ -2,7 +2,6 @@
 <media>
 	<containerFormats>
 		<format>flv</format>
-		<format>f4v</format>
 		<format>wmv</format>
 		<format>mp4</format>
 		<format>m4v</format>
@@ -28,42 +27,50 @@
 	
 	<audioCodecs>
 		<!--  Format of the codec tag:
-				<codec name="CODEC_NAME[Ex:libmp3lame]" decode="true" encode="true" provider="LIBRARY_PROVIDER[EX:ffmpeg]" strict="STRICTNESS[Ex:experimental(needed for ffmpeg)] />
+				<codec 
+					name="CODEC_NAME[Ex:libmp3lame]" 
+					category="[Category of the codec - this is the codec_name that ffprobe finds on the media. This is mandatory attribute and is used during comparison of source media and transcoded media." 
+					decode="true" 
+					encode="true" 
+					provider="LIBRARY_PROVIDER[EX:ffmpeg]" 
+					strict="STRICTNESS[Ex:experimental(needed for ffmpeg)] />
 		 -->
-		<codec name="wmav2" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="ac3" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="flac" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="wmav2" category="wmav2" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="ac3" category="ac3" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="flac" category="flac" decode="true" encode="true" provider="ffmpeg" />
 		<!--  Strictly experimental on ffmpeg. Dont have libfaac for now -->
-		<codec name="aac" decode="true" encode="true" provider="ffmpeg" strict="experimental" />
+		<codec name="aac" category="aac" decode="true" encode="true" provider="ffmpeg" strict="experimental" />
 		<!-- At this point its not available, but when we do, it should be the preferred codec 
-			<codec name="libfaac" decode="true" encode="true" provider="libfaac??" />
+			<codec name="libfaac" category="" decode="true" encode="true" provider="libfaac??" />
 		-->
-		<codec name="libmp3lame" decode="false" encode="true" provider="ffmpeg" />
-		<codec name="libvorbis" decode="false" encode="true" provider="ffmpeg" />
-		<codec name="libopencore_amrnb" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="pcm_s16be" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="pcm_s16le" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="libmp3lame" category="mp3" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libvorbis" category="vorbis" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libopencore_amrnb" category="amrnb" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="pcm_s16be" category="pcm_s16be" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="pcm_s16le" category="pcm_s16le" decode="true" encode="true" provider="ffmpeg" />
 		
 	</audioCodecs>
 
 	<videoCodecs>
 	
 		<!--  Decode only. So useful for just extracting images/thumbnails -->
-		<codec name="vp6" decode="true" encode="false" provider="ffmpeg" />
+		<codec name="vp6" category="vp6" decode="true" encode="false" provider="ffmpeg" />
 
 		<!--  Encode only -->
-		<codec name="libx264" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libx264" category="h264" decode="false" encode="true" provider="ffmpeg" />
 
 		<!--  Encode only -->
-		<codec name="libtheora" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libtheora" category="theora" decode="false" encode="true" provider="ffmpeg" />
 
-		<codec name="wmv2" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="msmpeg4" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="h263" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="mpeg4" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="libvpx" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="mpeg2video" decode="true" encode="true" provider="ffmpeg" />
-		<codec name="flv" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="wmv2" category="wmv2" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="msmpeg4" category="msmpeg4" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="h263" category="h263" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="mpeg4" category="mpeg4" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="libvpx" category="vp8" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="mpeg2video" category="mpeg2video" decode="true" encode="true" provider="ffmpeg" />
+
+		<!-- flv codec can be problematic with ffmpeg - use the newer libx264 instead when possible --> 
+		<codec name="flv" category="h264" decode="true" encode="true" provider="ffmpeg" />
 	
 	</videoCodecs>
 

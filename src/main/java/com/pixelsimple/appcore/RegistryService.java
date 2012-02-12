@@ -3,11 +3,8 @@
  */
 package com.pixelsimple.appcore;
 
-import java.util.Map;
-
 import com.pixelsimple.appcore.media.Codecs;
 import com.pixelsimple.appcore.media.ContainerFormats;
-import com.pixelsimple.appcore.media.Profile;
 import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
@@ -36,10 +33,9 @@ public final class RegistryService {
 	public static Codecs getSupportedCodecs() {
 		return (Codecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CODECS);
 	}
-
-	@SuppressWarnings("unchecked")
-	public static Map<String, Profile> getMediaProfiles() {
-		return (Map<String, Profile>) MapRegistry.INSTANCE.fetch(Registrable.MEDIA_PROFILES);
+	
+	public static Object getRegisteredEntry(Registrable key) {
+		return MapRegistry.INSTANCE.fetch(key);
 	}
 
 }
