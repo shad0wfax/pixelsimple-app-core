@@ -81,7 +81,7 @@ public class AppInitializer {
 		// Init Environment
 		Environment env = this.initEvn(configMap);
 		
-		// Init binlibs - based on available params/options - transcoder only vs full nova etc.
+		// Init binlibs - based on available params/options - framezap only vs full nova etc.
 		FfmpegConfig ffmpegConfig = this.initFfmpeg(configMap);
 		FfprobeConfig ffprobeConfig = this.initFfprobe(configMap);
 		

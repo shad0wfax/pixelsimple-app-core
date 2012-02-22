@@ -23,12 +23,12 @@ import com.pixelsimple.commons.util.Assert;
 public class BootstrapInitializer {
 
 	// Want the java cli params statically identified here.  
-	// The system arg passed from script during the startup: -Dnova.home=\COMPUTED_PATH\..
-	public static final String JAVA_SYS_ARG_APP_HOME_DIR = "nova.home";
+	// The system arg passed from script during the startup: -Dapp.home=\COMPUTED_PATH\..
+	public static final String JAVA_SYS_ARG_APP_HOME_DIR = "app.home";
 
 	// Want the java cli params statically identified here.  
-	// The system arg passed from script during the startup: -Dnova.home=\XYZ\..
-	public static final String JAVA_SYS_ARG_CONFIG_FILE = "nova.appConfigFile";
+	// The system arg passed from script during the startup: -DappConfigFile=\XYZ\..
+	public static final String JAVA_SYS_ARG_CONFIG_FILE = "appConfigFile";
 
 	// Should also init the logging here. Verify if this can lead to other issues?
 	private static final Logger LOG = LoggerFactory.getLogger(BootstrapInitializer.class);
@@ -38,11 +38,11 @@ public class BootstrapInitializer {
 	 * @return
 	 */
 	public Map<String, String> bootstrap() throws Exception {
-		String novaHomeDir = System.getProperty(JAVA_SYS_ARG_APP_HOME_DIR);
+		String appHomeDir = System.getProperty(JAVA_SYS_ARG_APP_HOME_DIR);
 		String configFile = System.getProperty(JAVA_SYS_ARG_CONFIG_FILE);
 		
 		// TODO: Add more static checks (we need this strong)
-		Assert.notNull(novaHomeDir, "Looks like the home directory wasn't supplied");
+		Assert.notNull(appHomeDir, "Looks like the home directory wasn't supplied");
 		Assert.notNull(configFile, "Looks like the config file wasn't supplied");
 		
 		// Check its a valid file:
@@ -50,7 +50,7 @@ public class BootstrapInitializer {
 		Assert.isTrue(file.isFile(), "Looks like the config file in not valid");
 		
 		Map<String, String> configs = new HashMap<String, String>();
-		configs.put(JAVA_SYS_ARG_APP_HOME_DIR, novaHomeDir);
+		configs.put(JAVA_SYS_ARG_APP_HOME_DIR, appHomeDir);
 		
 		this.loadConfigFile(file, configs);
 		

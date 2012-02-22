@@ -20,6 +20,7 @@ public enum Registrable {
 	SUPPORTED_CODECS,
 	MEDIA_PROFILES,
 	TRANSCODE_COMMAND_CHAIN,
+	TRANSCODER_QUEUE,
 	// Add more:
 
 }
