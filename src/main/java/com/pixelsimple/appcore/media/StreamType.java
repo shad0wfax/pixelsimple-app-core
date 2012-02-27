@@ -10,5 +10,6 @@ package com.pixelsimple.appcore.media;
  */
 public enum StreamType {
 	VIDEO, 
-	AUDIO
+	AUDIO,
+	SUBTITLE
 }
