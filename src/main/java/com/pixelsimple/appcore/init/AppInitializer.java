@@ -78,12 +78,12 @@ public class AppInitializer {
 		LOG.debug("init::Initing the app with the argMap:: {}", configMap);
 		ApiConfigImpl apiConfigImpl = new ApiConfigImpl();
 		
-		// Init Environment
+		// Init Environment - The first thing
 		Environment env = this.initEvn(configMap);
 		
 		// Init binlibs - based on available params/options - framezap only vs full nova etc.
-		FfmpegConfig ffmpegConfig = this.initFfmpeg(configMap);
-		FfprobeConfig ffprobeConfig = this.initFfprobe(configMap);
+		FfmpegConfig ffmpegConfig = this.initFfmpeg(env, configMap);
+		FfprobeConfig ffprobeConfig = this.initFfprobe(env, configMap);
 		
 		// Set it to the Api config:
 		apiConfigImpl.setEnvironment(env).setFfmpegConfig(ffmpegConfig).setFfprobeConfig(ffprobeConfig);
@@ -101,9 +101,9 @@ public class AppInitializer {
 	 * @param configMap
 	 * @return
 	 */
-	private FfprobeConfig initFfprobe(Map<String, String> configMap) {
+	private FfprobeConfig initFfprobe(Environment env, Map<String, String> configMap) {
 		String ffmpegPath = configMap.get(APP_CONFIG_FFPROBE_PATH_KEY);
-		FfprobeConfig ffprobeConfig = new FfprobeConfig(ffmpegPath);
+		FfprobeConfig ffprobeConfig = new FfprobeConfig(env.getAppBasePath() + ffmpegPath);
 		return ffprobeConfig;
 	}
 
@@ -112,9 +112,9 @@ public class AppInitializer {
 	 * @param configMap
 	 * @return
 	 */
-	private FfmpegConfig initFfmpeg(Map<String, String> configMap) {
+	private FfmpegConfig initFfmpeg(Environment env, Map<String, String> configMap) {
 		String ffmpegPath = configMap.get(APP_CONFIG_FFMPEG_PATH_KEY);
-		FfmpegConfig ffmpegConfig = new FfmpegConfig(ffmpegPath);
+		FfmpegConfig ffmpegConfig = new FfmpegConfig(env.getAppBasePath() + ffmpegPath);
 		return ffmpegConfig;
 	}
 

@@ -38,9 +38,11 @@ public class AppInitializerTest {
 		ApiConfig config = (ApiConfig) RegistryService.getRegisteredApiConfig();
 		
 		Assert.assertNotNull(config);
-		Assert.assertEquals(config.getFfmpegConfig().getExecutablePath(), configs.get("ffmpegPath"));
-		Assert.assertEquals(config.getFfprobeConfig().getExecutablePath(), configs.get("ffprobePath"));
-		Assert.assertEquals(config.getEnvironment().getAppBasePath(), configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR));
+		Assert.assertEquals(config.getFfmpegConfig().getExecutablePath(),  
+			configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator() + configs.get("ffmpegPath"));
+		Assert.assertEquals(config.getFfprobeConfig().getExecutablePath(), 
+			configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator() + configs.get("ffprobePath"));
+		Assert.assertEquals(config.getEnvironment().getAppBasePath(), configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator());
 	}
 
 	/**
@@ -104,14 +106,14 @@ public class AppInitializerTest {
 		
 		if (OSUtils.CURRENT_OS == OS.WINDOWS) {
 			// Keep this path up to date with ffmpeg updates
-			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, "c:/dev/pixelsimple");
-			configs.put("ffprobePath", "c:/dev/pixelsimple/ffprobe/32_bit/0.8/ffprobe.exe"); 
-			configs.put("ffmpegPath", "c:/dev/pixelsimple/ffmpeg/32_bit/0.8/ffmpeg.exe"); 
+			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, "c:\\dev\\pixelsimple");
+			configs.put("ffprobePath", "ffprobe/32_bit/0.8/ffprobe.exe"); 
+			configs.put("ffmpegPath", "ffmpeg/32_bit/0.8/ffmpeg.exe"); 
 		} else if (OSUtils.CURRENT_OS == OS.MAC) {
 			// Keep this path up to date with ffmpeg updates
 			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR,  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple");
-			configs.put("ffprobePath",  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffprobe/32_bit/0.7_beta2/ffprobe"); 
-			configs.put("ffmpegPath",  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffmpeg/32_bit/0.8.7/ffmpeg"); 
+			configs.put("ffprobePath",  "ffprobe/32_bit/0.7_beta2/ffprobe"); 
+			configs.put("ffmpegPath",  "ffmpeg/32_bit/0.8.7/ffmpeg"); 
 		}  else {
 			// add linux based tests when ready :-)
 		}
