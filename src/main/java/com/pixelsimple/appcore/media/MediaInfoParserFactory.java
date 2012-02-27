@@ -25,7 +25,7 @@ import org.w3c.dom.NodeList;
 public class MediaInfoParserFactory {
 	private static final Logger LOG = LoggerFactory.getLogger(MediaInfoParserFactory.class);
 	
-	public static void parseContainerAndCodecs(ContainerFormats containerFormats, Codecs codecs) throws Exception {
+	public void parseContainerAndCodecs(ContainerFormats containerFormats, Codecs codecs) throws Exception {
 		InputStream is = MediaInfoParserFactory.class.getResourceAsStream("/com/pixelsimple/appcore/media/mediaContainerAndCodecs.xml");
 		
 		try {

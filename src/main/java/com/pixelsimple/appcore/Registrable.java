@@ -21,6 +21,7 @@ public enum Registrable {
 	MEDIA_PROFILES,
 	TRANSCODE_COMMAND_CHAIN,
 	TRANSCODER_QUEUE,
+	SUPPORTED_MIME_TYPES,
 	// Add more:
 
 }

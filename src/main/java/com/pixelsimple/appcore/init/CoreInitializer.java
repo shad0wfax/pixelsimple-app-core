@@ -8,6 +8,8 @@ import com.pixelsimple.appcore.Registry;
 import com.pixelsimple.appcore.media.Codecs;
 import com.pixelsimple.appcore.media.ContainerFormats;
 import com.pixelsimple.appcore.media.MediaInfoParserFactory;
+import com.pixelsimple.appcore.mime.Mime;
+import com.pixelsimple.appcore.mime.MimeTypeMapper;
 
 /**
  *
@@ -31,8 +33,9 @@ public class CoreInitializer implements Initializable {
 	public void deinitialize(Registry registry) throws Exception {
 		registry.remove(Registrable.SUPPORTED_CONTAINER_FORMATS);
 		registry.remove(Registrable.SUPPORTED_CODECS);
+		registry.remove(Registrable.SUPPORTED_MIME_TYPES);
 		
-		// TODO: All things that have to be de-initialized.
+		// Ensure all of the added ones are removed.
 	}
 
 	/**
@@ -41,11 +44,21 @@ public class CoreInitializer implements Initializable {
 	private void initContainersAndCodecs(Registry registry) throws Exception {
 		ContainerFormats containerFormats = new ContainerFormats();
 		Codecs codecs = new Codecs();
-		MediaInfoParserFactory.parseContainerAndCodecs(containerFormats, codecs);
+		MediaInfoParserFactory factory = new MediaInfoParserFactory();
+		factory.parseContainerAndCodecs(containerFormats, codecs);
+		
+		MimeTypeMapper mapper = new MimeTypeMapper();
+		Mime mime = mapper.mapDefaultMimeTypes();
 		
 		// Load these objects up in registry
 		registry.register(Registrable.SUPPORTED_CONTAINER_FORMATS, containerFormats);
 		registry.register(Registrable.SUPPORTED_CODECS, codecs);
+		registry.register(Registrable.SUPPORTED_MIME_TYPES, mime);
+
+		// quick gc maybe!
+		factory = null;
+		mapper = null;
+		
 	}
 
 }

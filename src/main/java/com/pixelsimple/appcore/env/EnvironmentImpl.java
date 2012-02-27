@@ -33,16 +33,7 @@ public final class EnvironmentImpl implements Environment {
 	 * @param appBasePath the appBasePath to set
 	 */
 	public void setAppBasePath(String appBasePath) {
-		this.appBasePath = appBasePath;
-
-		// Sanitize this input - add the trailing / or \ if needed. Will simplify the paths to other directories.
-		if (appBasePath.endsWith(OSUtils.folderSeparator()))
-				return;
-		
-		if (OSUtils.CURRENT_OS == OSUtils.OS.WINDOWS && appBasePath.endsWith("/")) 
-				return;
-		
-		this.appBasePath = this.appBasePath + OSUtils.folderSeparator();
+		this.appBasePath = OSUtils.appendFolderSeparator(appBasePath);
 	}
 
 	public String toString() {
