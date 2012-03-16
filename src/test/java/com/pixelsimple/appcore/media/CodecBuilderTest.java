@@ -33,17 +33,19 @@ public class CodecBuilderTest {
 	@Test
 	public void testBuildCodecWithValidData() throws Exception {
 		Node node = validAudioCodecXmlNode();
-		Codec codec = CodecBuilder.buildCodec(Codec.CODEC_TYPE.AUDIO, node);
-		Assert.assertEquals(codec.getName(), "libmp3lame");
-		Assert.assertEquals(codec.getKey(), "AUDIO:libmp3lame");
-		Assert.assertEquals(codec.supportsDecoding(), false);
-		Assert.assertEquals(codec.supportsEncoding(), true);
-		Assert.assertEquals(codec.getProvider(), "ffmpeg");
-		Assert.assertEquals(codec.getStrict(), "");
-		Assert.assertEquals(codec.getCategory(), "mp3");
+		AudioCodec codec1 = (AudioCodec) CodecBuilder.buildCodec(Codec.CODEC_TYPE.AUDIO, node);
+		Assert.assertEquals(codec1.getName(), "libmp3lame");
+		Assert.assertEquals(codec1.getKey(), "AUDIO:libmp3lame");
+		Assert.assertEquals(codec1.supportsDecoding(), false);
+		Assert.assertEquals(codec1.supportsEncoding(), true);
+		Assert.assertEquals(codec1.getProvider(), "ffmpeg");
+		Assert.assertEquals(codec1.getStrict(), "");
+		Assert.assertEquals(codec1.getCategory(), "mp3");
+		Assert.assertEquals(codec1.getMaxChannels(), 2);
+		
 
 		node = validVideoCodecXmlNode();
-		codec = CodecBuilder.buildCodec(Codec.CODEC_TYPE.VIDEO, node);
+		VideoCodec codec = (VideoCodec) CodecBuilder.buildCodec(Codec.CODEC_TYPE.VIDEO, node);
 		Assert.assertEquals(codec.getName(), "libvpx");
 		Assert.assertEquals(codec.getKey(), "VIDEO:libvpx");
 		Assert.assertEquals(codec.supportsDecoding(), true);
@@ -72,7 +74,7 @@ public class CodecBuilderTest {
 	}
 
 	private Node validAudioCodecXmlNode() {
-		String xml = "<codec name=\"libmp3lame\" category=\"mp3\" decode=\"false\" encode=\"true\" provider=\"ffmpeg\" />";
+		String xml = "<codec name=\"libmp3lame\" category=\"mp3\" decode=\"false\" encode=\"true\" provider=\"ffmpeg\" maxChannels=\"2\" />";
 		return asNode(xml);
 	}
 

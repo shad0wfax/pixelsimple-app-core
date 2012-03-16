@@ -11,27 +11,25 @@ import com.pixelsimple.commons.util.Assert;
  * @author Akshay Sharma
  * Feb 6, 2012
  */
-public class Codec {
+public abstract class Codec {
 	public static enum CODEC_TYPE {VIDEO, AUDIO};	
 	
-	private String name;
+	protected String name;
+	protected CODEC_TYPE codecType;
 	private String category;
-	private CODEC_TYPE codecType;
 	private boolean supportsDecoding;
 	private boolean supportsEncoding;
 	private String provider;
 	private String strict;
 	
 	public static Codec create(CODEC_TYPE codecType, String codec) {
-		return new Codec(codecType, codec);
-	}
-	
-	public Codec(CODEC_TYPE codecType, String name) {
 		Assert.notNull(codecType, "A valid name type needs to be supplied");
-		Assert.notNull(name, "A valid name needs to be supplied");
-
-		this.codecType = codecType;
-		this.name = name.trim().toLowerCase();
+		
+		if (codecType == CODEC_TYPE.AUDIO) {
+			return new AudioCodec(codec);
+		} else {
+			return new VideoCodec(codec);
+		}
 	}
 	
 	/**
@@ -65,6 +63,7 @@ public class Codec {
 	/**
 	 * A critical method that identifies a codec uniquely. 
 	 * It is a the combination of "Codec Type [audio/video]-[name]"
+	 * TODO: if using more than one lib/provider (ffmpeg and mplayer), we have collisions. Use provider as key as well.
 	 * @return
 	 */
 	public String getKey() {

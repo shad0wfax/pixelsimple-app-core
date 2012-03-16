@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Node;
 
+import com.pixelsimple.appcore.media.Codec.CODEC_TYPE;
 import com.pixelsimple.commons.util.StringUtils;
 
 /**
@@ -52,8 +53,25 @@ public class CodecBuilder {
 		codec.setStrict(strict);
 		codec.setSupportsDecoding(decode != null ? Boolean.valueOf(decode).booleanValue() : false);
 		codec.setSupportsEncoding(encode != null ? Boolean.valueOf(encode).booleanValue() : false);
+		
+		if (codecType == CODEC_TYPE.AUDIO) {
+			buildAudioCodecSettings(xpath, xmlCodecNode, (AudioCodec) codec);
+		} 
 	
 		return codec;
+	}
+
+	/**
+	 * @param xpath
+	 * @param codec
+	 */
+	private static void buildAudioCodecSettings(XPath xpath, Node xmlCodecNode, AudioCodec codec) throws Exception {
+		String maxChannels = (String) xpath.evaluate("@maxChannels", xmlCodecNode, XPathConstants.STRING);
+		
+		if (StringUtils.isNullOrEmpty(maxChannels))
+			return;
+		
+		codec.setMaxChannels(Integer.valueOf(maxChannels));
 	}
 
 }

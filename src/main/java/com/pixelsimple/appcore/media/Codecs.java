@@ -29,7 +29,7 @@ public class Codecs {
 	}
 	
 	public Codec findCodec(Codec.CODEC_TYPE codecType, String codecName) {
-		Codec codec = new Codec(codecType, codecName);
+		Codec codec = Codec.create(codecType, codecName);
 		return this.codecs.get(codec.getKey());
 	}
 

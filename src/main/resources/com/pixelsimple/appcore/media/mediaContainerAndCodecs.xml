@@ -22,6 +22,7 @@
 		<format>mp3</format>
 		<format>wma</format>
 		<format>m4a</format>
+		<format>wav</format>
 
 	</containerFormats>
 	
@@ -33,9 +34,10 @@
 					decode="true" 
 					encode="true" 
 					provider="LIBRARY_PROVIDER[EX:ffmpeg]" 
-					strict="STRICTNESS[Ex:experimental(needed for ffmpeg)] />
+					strict="STRICTNESS[Ex:experimental(needed for ffmpeg)] 
+					 maxChannels="[optional param that indicates the max channels supported by this codec]" />
 		 -->
-		<codec name="wmav2" category="wmav2" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="wmav2" category="wmav2" decode="true" encode="true" provider="ffmpeg" maxChannels="2" />
 		<codec name="ac3" category="ac3" decode="true" encode="true" provider="ffmpeg" />
 		<codec name="flac" category="flac" decode="true" encode="true" provider="ffmpeg" />
 		<!--  Strictly experimental on ffmpeg. Dont have libfaac for now -->
@@ -43,9 +45,11 @@
 		<!-- At this point its not available, but when we do, it should be the preferred codec 
 			<codec name="libfaac" category="" decode="true" encode="true" provider="libfaac??" />
 		-->
-		<codec name="libmp3lame" category="mp3" decode="false" encode="true" provider="ffmpeg" />
+		<codec name="libmp3lame" category="mp3" decode="false" encode="true" provider="ffmpeg" maxChannels="2" />
 		<codec name="libvorbis" category="vorbis" decode="false" encode="true" provider="ffmpeg" />
-		<codec name="libopencore_amrnb" category="amrnb" decode="true" encode="true" provider="ffmpeg" />
+		<codec name="libopencore_amrnb" category="amrnb" decode="true" encode="true" provider="ffmpeg" maxChannels="1" />
+		
+		<!--  TODO: Why do we need pcm_s16be and pcm_s16le? Issues encoding with them -->
 		<codec name="pcm_s16be" category="pcm_s16be" decode="true" encode="true" provider="ffmpeg" />
 		<codec name="pcm_s16le" category="pcm_s16le" decode="true" encode="true" provider="ffmpeg" />
 		

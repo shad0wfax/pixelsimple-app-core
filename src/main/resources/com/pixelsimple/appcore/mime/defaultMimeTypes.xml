@@ -44,4 +44,12 @@
 	  <extension>default</extension>
 	  <mime-type>application/octet-stream</mime-type>
 	</mime-mapping>
+	<mime-mapping>
+	  <extension>flv</extension>
+	  <mime-type>video/x-flv</mime-type>
+	</mime-mapping>
+	<mime-mapping>
+	  <extension>f4v</extension>
+	  <mime-type>video/mp4</mime-type>
+	</mime-mapping>
 </mime-mappings>
