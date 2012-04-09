@@ -28,4 +28,19 @@ public interface ApiConfig {
 	 * @return the environment
 	 */
 	public Environment getEnvironment();
+
+	/**
+	 * @return the hlsTranscodeCompleteFile
+	 */
+	public String getHlsTranscodeCompleteFile();
+
+	/**
+	 * @return the hlsPlaylistGeneratorPath
+	 */
+	public String getHlsPlaylistGeneratorPath();
+
+	/**
+	 * @return the hlsPlaylistGeneratorPath
+	 */
+	public String getHlsFileSegmentPattern();
 }

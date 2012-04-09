@@ -32,6 +32,9 @@ public class AppInitializer {
 	// Again static dependencies - I want complete control on the loading/initializing.
 	private static final String APP_CONFIG_FFMPEG_PATH_KEY = "ffmpegPath";
 	private static final String APP_CONFIG_FFPROBE_PATH_KEY = "ffprobePath";
+	private static final String APP_CONFIG_HLS_COMPLETE_FILE = "hlsTranscodeCompleteFile";
+	private static final String APP_CONFIG_HLS_PLAYLIST_GENERATOR_PATH = "hlsPlaylistGeneratorPath";
+	private static final String APP_CONFIG_HLS_FILE_SEGMENT_PATTERN = "hlsFileSegmentPattern";
 	
 	// Order is important, so a list (one initializable might depend on other)
 	private static List<Initializable> MODULE_INITIALIZABLES = new ArrayList<Initializable>(8);
@@ -85,8 +88,15 @@ public class AppInitializer {
 		FfmpegConfig ffmpegConfig = this.initFfmpeg(env, configMap);
 		FfprobeConfig ffprobeConfig = this.initFfprobe(env, configMap);
 		
+		String hlsTranscodeCompleteFile = configMap.get(APP_CONFIG_HLS_COMPLETE_FILE);
+		String hlsPlaylistGeneratorPath = configMap.get(APP_CONFIG_HLS_PLAYLIST_GENERATOR_PATH);
+		String hlsFileSegmentPattern = configMap.get(APP_CONFIG_HLS_FILE_SEGMENT_PATTERN);
+		
 		// Set it to the Api config:
-		apiConfigImpl.setEnvironment(env).setFfmpegConfig(ffmpegConfig).setFfprobeConfig(ffprobeConfig);
+		apiConfigImpl.setEnvironment(env).setFfmpegConfig(ffmpegConfig).setFfprobeConfig(ffprobeConfig)
+			.setHlsTranscodeCompleteFile(hlsTranscodeCompleteFile)
+			.setHlsPlaylistGeneratorPath(env.getAppBasePath() + hlsPlaylistGeneratorPath)
+			.setHlsFileSegmentPattern(hlsFileSegmentPattern);
 
 		LOG.debug("init::Registered API Config:: {}", apiConfigImpl);
 		

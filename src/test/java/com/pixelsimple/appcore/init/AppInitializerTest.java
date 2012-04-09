@@ -16,7 +16,6 @@ import com.pixelsimple.appcore.Registry;
 import com.pixelsimple.appcore.RegistryService;
 import com.pixelsimple.appcore.registry.MapRegistry;
 import com.pixelsimple.commons.util.OSUtils;
-import com.pixelsimple.commons.util.OSUtils.OS;
 
 /**
  *
@@ -43,6 +42,10 @@ public class AppInitializerTest {
 		Assert.assertEquals(config.getFfprobeConfig().getExecutablePath(), 
 			configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator() + configs.get("ffprobePath"));
 		Assert.assertEquals(config.getEnvironment().getAppBasePath(), configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator());
+		Assert.assertEquals(config.getHlsTranscodeCompleteFile(), "pixelsimple_hls_transcode.complete");
+		Assert.assertEquals(config.getHlsPlaylistGeneratorPath(),  
+				configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator() + configs.get("ffmpegPath"));
+		Assert.assertEquals(config.getHlsFileSegmentPattern(), "%06d");
 	}
 
 	/**
@@ -104,19 +107,28 @@ public class AppInitializerTest {
 	private Map<String, String> getConfig() {
 		Map<String, String> configs = new HashMap<String, String>();
 		
-		if (OSUtils.CURRENT_OS == OS.WINDOWS) {
+		if (OSUtils.isWindows()) {
 			// Keep this path up to date with ffmpeg updates
 			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, "c:\\dev\\pixelsimple");
 			configs.put("ffprobePath", "ffprobe/32_bit/0.8/ffprobe.exe"); 
 			configs.put("ffmpegPath", "ffmpeg/32_bit/0.8/ffmpeg.exe"); 
-		} else if (OSUtils.CURRENT_OS == OS.MAC) {
+			
+			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
+			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/0.8/ffmpeg.exe"); 
+		} else if (OSUtils.isMac()) {
 			// Keep this path up to date with ffmpeg updates
 			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR,  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple");
 			configs.put("ffprobePath",  "ffprobe/32_bit/0.7_beta2/ffprobe"); 
 			configs.put("ffmpegPath",  "ffmpeg/32_bit/0.8.7/ffmpeg"); 
+
+			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
+			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/0.8.7/ffmpeg"); 
 		}  else {
 			// add linux based tests when ready :-)
 		}
+		
+		configs.put("hlsTranscodeCompleteFile", "pixelsimple_hls_transcode.complete"); 
+		configs.put("hlsFileSegmentPattern", "%06d"); 
 		
 		return configs;
 	}

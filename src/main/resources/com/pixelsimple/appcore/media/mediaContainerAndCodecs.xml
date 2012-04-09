@@ -17,6 +17,10 @@
 		<format>divx</format>
 		<format>mov</format>
 		<format>3gp</format>
+
+		<!-- // Apple HLS -->
+		<format>ts</format>
+		<format>m3u8</format>
 		
 		<!-- // Audio ones -->
 		<format>mp3</format>

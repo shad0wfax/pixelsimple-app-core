@@ -9,7 +9,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.pixelsimple.commons.util.OSUtils;
-import com.pixelsimple.commons.util.OSUtils.OS;
 
 /**
  *
@@ -39,10 +38,10 @@ public class FfprobeConfigTest {
 		try {
 			String validFile = null;
 			
-			if (OSUtils.CURRENT_OS == OS.WINDOWS) {
+			if (OSUtils.isWindows()) {
 				// Keep this path up to date with ffmpeg updates
 				validFile = "c:/dev/pixelsimple/ffprobe/32_bit/0.8/ffprobe.exe";
-			} else if (OSUtils.CURRENT_OS == OS.MAC) {
+			} else if (OSUtils.isMac()) {
 				// Keep this path up to date with ffmpeg updates
 				validFile =  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffprobe/32_bit/0.7_beta2/ffprobe";
 			}  

@@ -16,9 +16,20 @@ import com.pixelsimple.appcore.media.MediaType;
 public class Mime {
 	private Map<Extension, String> mimeMapping = new HashMap<Extension, String>();
 	
+	public String getMimeType(String extension) {
+		Extension e = new Extension(extension, null);
+		return this.mimeMapping.get(e);
+	}
+	
 	public String getMimeType(String extension, MediaType mediaType) {
 		Extension e = new Extension(extension, mediaType);
-		return this.mimeMapping.get(e);
+		String mimeType = this.mimeMapping.get(e);
+		
+		// Check if there is a mime mapping without mediaType (mediaType is optional remember)
+		if (mimeType == null) {
+			mimeType = this.getMimeType(extension);
+		}
+		return mimeType;
 	}
 	
 	// Only MimeMapper can add stuff.

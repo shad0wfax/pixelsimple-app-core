@@ -36,7 +36,9 @@ public class MimeTest {
 
 		System.out.println(mime);
 
-		Assert.assertNull(mime.getMimeType("xml", MediaType.AUDIO));
+		// - Test case changed - now we get back a valid value even if the media type is not correct.
+		//Assert.assertNull(mime.getMimeType("xml", MediaType.AUDIO));
+		Assert.assertEquals(mime.getMimeType("xml", MediaType.AUDIO), "text/xml");
 		Assert.assertEquals(mime.getMimeType("xml", null), "text/xml");
 		Assert.assertEquals(mime.getMimeType("default", null), "application/octet-stream");
 
