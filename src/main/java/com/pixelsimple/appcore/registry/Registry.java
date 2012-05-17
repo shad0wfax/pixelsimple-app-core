@@ -1,7 +1,7 @@
 /**
  * © PixelSimple 2011-2012.
  */
-package com.pixelsimple.appcore;
+package com.pixelsimple.appcore.registry;
 
 import java.util.Collection;
 

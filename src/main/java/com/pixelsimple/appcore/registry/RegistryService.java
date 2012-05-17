@@ -1,11 +1,11 @@
 /**
  * © PixelSimple 2011-2012.
  */
-package com.pixelsimple.appcore;
+package com.pixelsimple.appcore.registry;
 
+import com.pixelsimple.appcore.ApiConfig;
 import com.pixelsimple.appcore.media.Codecs;
 import com.pixelsimple.appcore.media.ContainerFormats;
-import com.pixelsimple.appcore.registry.MapRegistry;
 
 /**
  *
@@ -38,4 +38,7 @@ public final class RegistryService {
 		return MapRegistry.INSTANCE.fetch(key);
 	}
 
+	public static GenericRegistryEntry getGenericRegistryEntry() {
+		return  getRegisteredApiConfig().getGenericRegistryEntry();
+	}
 }

@@ -11,10 +11,12 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.pixelsimple.appcore.ApiConfig;
-import com.pixelsimple.appcore.Registrable;
-import com.pixelsimple.appcore.Registry;
-import com.pixelsimple.appcore.RegistryService;
+import com.pixelsimple.appcore.registry.GenericRegistryEntry;
+import com.pixelsimple.appcore.registry.GenericRegistryEntryKey;
 import com.pixelsimple.appcore.registry.MapRegistry;
+import com.pixelsimple.appcore.registry.Registrable;
+import com.pixelsimple.appcore.registry.Registry;
+import com.pixelsimple.appcore.registry.RegistryService;
 import com.pixelsimple.commons.util.OSUtils;
 
 /**
@@ -42,10 +44,6 @@ public class AppInitializerTest {
 		Assert.assertEquals(config.getFfprobeConfig().getExecutablePath(), 
 			configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator() + configs.get("ffprobePath"));
 		Assert.assertEquals(config.getEnvironment().getAppBasePath(), configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator());
-		Assert.assertEquals(config.getHlsTranscodeCompleteFile(), "pixelsimple_hls_transcode.complete");
-		Assert.assertEquals(config.getHlsPlaylistGeneratorPath(),  
-				configs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR) + OSUtils.folderSeparator() + configs.get("ffmpegPath"));
-		Assert.assertEquals(config.getHlsFileSegmentPattern(), "%06d");
 	}
 
 	/**
@@ -58,25 +56,29 @@ public class AppInitializerTest {
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
 		int size = MapRegistry.INSTANCE.fetchAllValues().size();
-		Assert.assertEquals(size, 4);
+		Assert.assertEquals(size, 5);
 		
 		initializer = new AppInitializer();
 		initializer.addModuleInitializable(new Initializable() {
 			
 			@Override
-			public void initialize(Registry registry) throws Exception {
-				registry.register(Registrable.MEDIA_PROFILES, "abc");
+			public void initialize(Registry registry, ApiConfig config) throws Exception {
+				GenericRegistryEntry entry = config.getGenericRegistryEntry();
+				entry.addEntry(TempEnum.A, "abc");
 			}
 			
 			@Override
-			public void deinitialize(Registry registry) throws Exception {
-				registry.remove(Registrable.MEDIA_PROFILES);
+			public void deinitialize(Registry registry, ApiConfig config) throws Exception {
+				GenericRegistryEntry entry = config.getGenericRegistryEntry();
+				entry.removeEntry(TempEnum.A);
 			}
 		});
 		initializer.init(configs);
 		
-		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), size + 1);
-		Assert.assertEquals(MapRegistry.INSTANCE.fetch(Registrable.MEDIA_PROFILES), "abc");
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), size);
+		Assert.assertNotNull(MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CODECS));
+		Assert.assertEquals(RegistryService.getRegisteredApiConfig().getGenericRegistryEntry().getEntry(TempEnum.A), "abc");
+
 		
 		initializer.shutdown();
 		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 0);
@@ -94,7 +96,7 @@ public class AppInitializerTest {
 		initializer.init(configs);
 		
 		// Keep track on the count here and ensure it is updated based on init code
-		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 4);
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 5);
 
 		// Can't do this any longer - since modules register their own stuff.
 //		for (Registrable r : Registrable.values()) {
@@ -131,5 +133,25 @@ public class AppInitializerTest {
 		configs.put("hlsFileSegmentPattern", "%06d"); 
 		
 		return configs;
+	}
+	
+	private enum TempEnum implements GenericRegistryEntryKey {
+		A;
+
+		/* (non-Javadoc)
+		 * @see com.pixelsimple.appcore.registry.GenericRegistryEntryKey#getUniqueModuleName()
+		 */
+		@Override
+		public String getUniqueModuleName() {
+			return "unittesting";
+		}
+
+		/* (non-Javadoc)
+		 * @see com.pixelsimple.appcore.registry.GenericRegistryEntryKey#getUniqueId()
+		 */
+		@Override
+		public String getUniqueId() {
+			return name();
+		}
 	}
 }

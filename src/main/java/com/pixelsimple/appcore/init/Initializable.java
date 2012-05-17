@@ -3,7 +3,8 @@
  */
 package com.pixelsimple.appcore.init;
 
-import com.pixelsimple.appcore.Registry;
+import com.pixelsimple.appcore.ApiConfig;
+import com.pixelsimple.appcore.registry.Registry;
 
 
 /**
@@ -13,7 +14,7 @@ import com.pixelsimple.appcore.Registry;
  */
 public interface Initializable {
 
-	public void initialize(Registry registry) throws Exception;
+	public void initialize(Registry registry, ApiConfig apiConfig) throws Exception;
 
-	public void deinitialize(Registry registry) throws Exception;
+	public void deinitialize(Registry registry, ApiConfig apiConfig) throws Exception;
 }

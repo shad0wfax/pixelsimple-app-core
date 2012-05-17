@@ -7,8 +7,6 @@ import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
 
-import com.pixelsimple.appcore.Registrable;
-import com.pixelsimple.appcore.Registry;
 import com.pixelsimple.commons.util.Assert;
 
 /**

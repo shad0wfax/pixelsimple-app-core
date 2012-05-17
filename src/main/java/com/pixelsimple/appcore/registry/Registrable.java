@@ -1,7 +1,7 @@
 /**
  * © PixelSimple 2011-2012.
  */
-package com.pixelsimple.appcore;
+package com.pixelsimple.appcore.registry;
 
 /**
  * An enum to let modules/components to register the keys. 
@@ -16,12 +16,14 @@ package com.pixelsimple.appcore;
 public enum Registrable {
 	
 	API_CONFIG,
+	GENERIC_REGISTRY_ENTRY,
 	SUPPORTED_CONTAINER_FORMATS,
 	SUPPORTED_CODECS,
-	MEDIA_PROFILES,
-	TRANSCODE_COMMAND_CHAIN,
-	TRANSCODER_QUEUE,
 	SUPPORTED_MIME_TYPES,
+	
+//	MEDIA_PROFILES,
+//	TRANSCODE_COMMAND_CHAIN,
+//	TRANSCODER_QUEUE,
 	// Add more:
 
 }

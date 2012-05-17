@@ -3,13 +3,14 @@
  */
 package com.pixelsimple.appcore.init;
 
-import com.pixelsimple.appcore.Registrable;
-import com.pixelsimple.appcore.Registry;
+import com.pixelsimple.appcore.ApiConfig;
 import com.pixelsimple.appcore.media.Codecs;
 import com.pixelsimple.appcore.media.ContainerFormats;
 import com.pixelsimple.appcore.media.MediaInfoParserFactory;
 import com.pixelsimple.appcore.mime.Mime;
 import com.pixelsimple.appcore.mime.MimeTypeMapper;
+import com.pixelsimple.appcore.registry.Registrable;
+import com.pixelsimple.appcore.registry.Registry;
 
 /**
  *
@@ -22,7 +23,7 @@ public class CoreInitializer implements Initializable {
 	 * @see com.pixelsimple.appcore.init.Initializable#initialize()
 	 */
 	@Override
-	public void initialize(Registry registry) throws Exception {
+	public void initialize(Registry registry, ApiConfig apiConfig) throws Exception {
 		this.initContainersAndCodecs(registry);
 	}
 
@@ -30,7 +31,7 @@ public class CoreInitializer implements Initializable {
 	 * @see com.pixelsimple.appcore.init.Initializable#deinitialize()
 	 */
 	@Override
-	public void deinitialize(Registry registry) throws Exception {
+	public void deinitialize(Registry registry, ApiConfig apiConfig) throws Exception {
 		registry.remove(Registrable.SUPPORTED_CONTAINER_FORMATS);
 		registry.remove(Registrable.SUPPORTED_CODECS);
 		registry.remove(Registrable.SUPPORTED_MIME_TYPES);

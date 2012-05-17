@@ -10,8 +10,6 @@ import org.junit.After;
 import org.junit.Test;
 
 import com.pixelsimple.appcore.ApiConfigImpl;
-import com.pixelsimple.appcore.Registrable;
-import com.pixelsimple.appcore.Registry;
 
 /**
  *
@@ -51,7 +49,7 @@ public class MapRegistryTest {
 	}
 
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#register(com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#register(com.com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
 	 */
 	@Test
 	public void registerWithInvalidKeyValue() {
@@ -73,7 +71,7 @@ public class MapRegistryTest {
 	}
 
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#register(com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#register(com.com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
 	 */
 	@Test
 	public void register() {
@@ -92,7 +90,7 @@ public class MapRegistryTest {
 	}
 		
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#register(com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#register(com.com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
 	 */
 	@Test
 	public void forceRegisterWithInvalidKeyValue() {
@@ -113,7 +111,7 @@ public class MapRegistryTest {
 		}
 	}
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#forceRegister(com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#forceRegister(com.com.pixelsimple.appcore.registry.Registrable, java.lang.Object)}.
 	 */
 	@Test
 	public void forceRegister() {
@@ -133,7 +131,7 @@ public class MapRegistryTest {
 	}
 
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#fetch(com.pixelsimple.appcore.registry.Registrable)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#fetch(com.com.pixelsimple.appcore.registry.Registrable)}.
 	 */
 	@Test
 	public void fetch() {
@@ -152,7 +150,7 @@ public class MapRegistryTest {
 	}
 
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#remove(com.pixelsimple.appcore.registry.Registrable)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#remove(com.com.pixelsimple.appcore.registry.Registrable)}.
 	 */
 	@Test
 	public void remove() {
@@ -206,7 +204,7 @@ public class MapRegistryTest {
 	}
 
 	/**
-	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#containsKey(com.pixelsimple.appcore.registry.Registrable)}.
+	 * Test method for {@link com.pixelsimple.appcore.registry.MapRegistry#containsKey(com.com.pixelsimple.appcore.registry.Registrable)}.
 	 */
 	@Test
 	public void testContainsKey() {

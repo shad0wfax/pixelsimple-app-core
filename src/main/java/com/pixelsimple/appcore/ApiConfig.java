@@ -5,7 +5,8 @@ package com.pixelsimple.appcore;
 
 import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 import com.pixelsimple.appcore.binlib.ffprobe.FfprobeConfig;
-import com.pixelsimple.appcore.env.Environment;
+import com.pixelsimple.appcore.config.Environment;
+import com.pixelsimple.appcore.registry.GenericRegistryEntry;
 
 /**
  *
@@ -29,18 +30,5 @@ public interface ApiConfig {
 	 */
 	public Environment getEnvironment();
 
-	/**
-	 * @return the hlsTranscodeCompleteFile
-	 */
-	public String getHlsTranscodeCompleteFile();
-
-	/**
-	 * @return the hlsPlaylistGeneratorPath
-	 */
-	public String getHlsPlaylistGeneratorPath();
-
-	/**
-	 * @return the hlsPlaylistGeneratorPath
-	 */
-	public String getHlsFileSegmentPattern();
+	public GenericRegistryEntry getGenericRegistryEntry();
 }
