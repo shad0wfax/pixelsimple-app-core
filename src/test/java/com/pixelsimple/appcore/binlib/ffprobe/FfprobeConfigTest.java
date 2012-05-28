@@ -40,10 +40,10 @@ public class FfprobeConfigTest {
 			
 			if (OSUtils.isWindows()) {
 				// Keep this path up to date with ffmpeg updates
-				validFile = "c:/dev/pixelsimple/ffprobe/32_bit/0.8/ffprobe.exe";
+				validFile = "c:/dev/pixelsimple/ffprobe/32_bit/1.0/ffprobe.exe";
 			} else if (OSUtils.isMac()) {
 				// Keep this path up to date with ffmpeg updates
-				validFile =  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffprobe/32_bit/0.7_beta2/ffprobe";
+				validFile =  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffprobe/32_bit/1.0/ffprobe";
 			}  
 			
 			if (validFile != null) {

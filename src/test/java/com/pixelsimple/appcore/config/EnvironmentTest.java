@@ -36,7 +36,7 @@ public class EnvironmentTest {
 		path = "c:\\dev\\pixelsimple\\app/";
 		appConfigs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, path);
 		impl = new Environment(appConfigs);
-		Assert.assertEquals(impl.getAppBasePath(), path);
+		Assert.assertEquals(impl.getAppBasePath(), path.substring(0, path.length() - 1) + OSUtils.folderSeparator());
 		
 		path = "/usr/local/mypath";
 		appConfigs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, path);

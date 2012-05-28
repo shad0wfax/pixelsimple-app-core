@@ -38,14 +38,13 @@ public final class Environment {
 		return appBasePath;
 	}
 
-//	/**
-//	 * @param appBasePath the appBasePath to set
-//	 */
-//	public void setAppBasePath(String appBasePath) {
-//		this.appBasePath = OSUtils.appendFolderSeparator(appBasePath);
-//	}
-//	
-	public Map<String, String> getApplicationConfiguratations() {
+	/**
+	 * Get the app_config_win/mac.properties file as a map of key value pair. This is useful for modules that need
+	 * to get their configurations.  The returned map is immutable to ensure no module can change the 
+	 * configuration once bootstrapped.
+	 * @return
+	 */
+	public Map<String, String> getImmutableApplicationConfiguratations() {
 		return this.appConfigs;
 	}
 

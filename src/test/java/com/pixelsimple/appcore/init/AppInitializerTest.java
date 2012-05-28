@@ -50,6 +50,39 @@ public class AppInitializerTest {
 	 * Test method for {@link com.pixelsimple.appcore.init.AppInitializer#init(java.util.Map)}.
 	 */
 	@Test
+	public void prooveAppConfigImmutability() throws Exception {
+		Map<String, String> configs = getConfig();
+		
+		AppInitializer initializer = new AppInitializer();
+		initializer.init(configs);
+		
+		ApiConfig config = (ApiConfig) RegistryService.getRegisteredApiConfig();
+		
+		Assert.assertNotNull(config);
+		
+		Map<String, String> appConfigs = config.getEnvironment().getImmutableApplicationConfiguratations();
+		Assert.assertNotNull(appConfigs);
+		Assert.assertTrue(appConfigs.size() > 0);
+		
+		try {
+			appConfigs.put("hello", "world");
+			Assert.fail();
+		} catch (UnsupportedOperationException e) {
+			Assert.assertTrue(true);
+		}
+
+		try {
+			appConfigs.put("ffmpegPath", "new_path");
+			Assert.fail();
+		} catch (UnsupportedOperationException e) {
+			Assert.assertTrue(true);
+		}
+	}
+
+	/**
+	 * Test method for {@link com.pixelsimple.appcore.init.AppInitializer#init(java.util.Map)}.
+	 */
+	@Test
 	public void addModuleInitializers() throws Exception {
 		Map<String, String> configs = getConfig();
 		
@@ -112,19 +145,19 @@ public class AppInitializerTest {
 		if (OSUtils.isWindows()) {
 			// Keep this path up to date with ffmpeg updates
 			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, "c:\\dev\\pixelsimple");
-			configs.put("ffprobePath", "ffprobe/32_bit/0.8/ffprobe.exe"); 
-			configs.put("ffmpegPath", "ffmpeg/32_bit/0.8/ffmpeg.exe"); 
+			configs.put("ffprobePath", "ffprobe/32_bit/1.0/ffprobe.exe"); 
+			configs.put("ffmpegPath", "ffmpeg/32_bit/1.0/ffmpeg.exe"); 
 			
 			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
-			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/0.8/ffmpeg.exe"); 
+			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/1.0/ffmpeg.exe"); 
 		} else if (OSUtils.isMac()) {
 			// Keep this path up to date with ffmpeg updates
 			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR,  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple");
-			configs.put("ffprobePath",  "ffprobe/32_bit/0.7_beta2/ffprobe"); 
-			configs.put("ffmpegPath",  "ffmpeg/32_bit/0.8.7/ffmpeg"); 
+			configs.put("ffprobePath",  "ffprobe/32_bit/1.0/ffprobe"); 
+			configs.put("ffmpegPath",  "ffmpeg/32_bit/1.0/ffmpeg"); 
 
 			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
-			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/0.8.7/ffmpeg"); 
+			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/1.0/ffmpeg"); 
 		}  else {
 			// add linux based tests when ready :-)
 		}

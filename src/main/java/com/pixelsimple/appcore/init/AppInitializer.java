@@ -4,6 +4,7 @@
 package com.pixelsimple.appcore.init;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -59,7 +60,10 @@ public class AppInitializer {
 	 * @param argMap
 	 */
 	public void init(Map<String, String> configMap) throws Exception {
-		ApiConfig apiConfig = this.initCore(configMap);
+		// Make the map immutable - Note: Make it after all configs are properly added (in case db override is needed).
+		Map<String, String> immutableConfigMap = Collections.unmodifiableMap(configMap);
+		
+		ApiConfig apiConfig = this.initCore(immutableConfigMap);
 
 		// init the registered module initialzables
 		for (Initializable initializable : MODULE_INITIALIZABLES) {
@@ -83,17 +87,17 @@ public class AppInitializer {
 	}
 
 	
-	private ApiConfig initCore(Map<String, String> configMap) throws Exception {
+	private ApiConfig initCore(Map<String, String> immutableConfigMap) throws Exception {
 		// Init log?? (it must already be)
-		LOG.debug("init::Initing the app with the argMap:: {}", configMap);
+		LOG.debug("init::Initing the app with the argMap:: {}", immutableConfigMap);
 		ApiConfigImpl apiConfigImpl = new ApiConfigImpl();
 		
 		// Init Environment - The first thing
-		Environment env = this.initEvn(configMap);
+		Environment env = this.initEvn(immutableConfigMap);
 		
 		// Init binlibs - based on available params/options - framezap only vs full nova etc.
-		FfmpegConfig ffmpegConfig = this.initFfmpeg(env, configMap);
-		FfprobeConfig ffprobeConfig = this.initFfprobe(env, configMap);
+		FfmpegConfig ffmpegConfig = this.initFfmpeg(env, immutableConfigMap);
+		FfprobeConfig ffprobeConfig = this.initFfprobe(env, immutableConfigMap);
 		
 		// Set it to the Api config:
 		GenericRegistryEntry genericRegistryEntry = (GenericRegistryEntry) MapRegistry.INSTANCE.fetch(

@@ -34,7 +34,7 @@ public class BootstrapInitializer {
 	private static final Logger LOG = LoggerFactory.getLogger(BootstrapInitializer.class);
 	
 	/**
-	 * Return a Map of configuration by reading the system properties that matter. 
+	 * Return a Map of configuration by reading the system properties that matter.
 	 * @return
 	 */
 	public Map<String, String> bootstrap() throws Exception {
@@ -54,7 +54,7 @@ public class BootstrapInitializer {
 		
 		this.loadConfigFile(file, configs);
 		
-		LOG.debug("bootstrap::Final computed config map::{}", configs);
+		LOG.debug("bootstrap::Final computed config map::{}.", configs);
 		
 		return configs;
 	}

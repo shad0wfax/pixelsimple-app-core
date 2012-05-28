@@ -40,10 +40,10 @@ public class FfmpegConfigTest {
 			
 			if (OSUtils.isWindows()) {
 				// Keep this path up to date with ffmpeg updates
-				validFile = "c:/dev/pixelsimple/ffmpeg/32_bit/0.8/ffmpeg.exe";
+				validFile = "c:/dev/pixelsimple/ffmpeg/32_bit/1.0/ffmpeg.exe";
 			} else if (OSUtils.isMac()) {
 				// Keep this path up to date with ffmpeg updates
-				validFile = OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffmpeg/32_bit/0.8.7/ffmpeg";
+				validFile = OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple/ffmpeg/32_bit/1.0/ffmpeg";
 			}  
 			
 			if (validFile != null) {
