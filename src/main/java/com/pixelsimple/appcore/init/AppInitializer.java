@@ -67,7 +67,7 @@ public class AppInitializer {
 
 		// init the registered module initialzables
 		for (Initializable initializable : MODULE_INITIALIZABLES) {
-			initializable.initialize(MapRegistry.INSTANCE, apiConfig);
+			initializable.initialize(apiConfig);
 		}
 	}
 
@@ -79,7 +79,7 @@ public class AppInitializer {
 		// De-initialize things in the reverse order 
 		for (int i = MODULE_INITIALIZABLES.size() -1; i >= 0; i--) {
 			Initializable initializable = MODULE_INITIALIZABLES.get(i);
-			initializable.deinitialize(MapRegistry.INSTANCE, apiConfig);
+			initializable.deinitialize(apiConfig);
 		}
 		// Finally remove all entries:
 		MapRegistry.INSTANCE.removeAll();

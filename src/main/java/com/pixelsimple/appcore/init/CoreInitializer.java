@@ -9,11 +9,12 @@ import com.pixelsimple.appcore.media.ContainerFormats;
 import com.pixelsimple.appcore.media.MediaInfoParserFactory;
 import com.pixelsimple.appcore.mime.Mime;
 import com.pixelsimple.appcore.mime.MimeTypeMapper;
+import com.pixelsimple.appcore.registry.MapRegistry;
 import com.pixelsimple.appcore.registry.Registrable;
 import com.pixelsimple.appcore.registry.Registry;
 
 /**
- *
+ * App Core classes can see MapRegistry.INSTANCE directly. The registry cannot be exposed outside of core directly.
  * @author Akshay Sharma
  * Feb 12, 2012
  */
@@ -23,18 +24,18 @@ public class CoreInitializer implements Initializable {
 	 * @see com.pixelsimple.appcore.init.Initializable#initialize()
 	 */
 	@Override
-	public void initialize(Registry registry, ApiConfig apiConfig) throws Exception {
-		this.initContainersAndCodecs(registry);
+	public void initialize(ApiConfig apiConfig) throws Exception {
+		this.initContainersAndCodecs(MapRegistry.INSTANCE);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.pixelsimple.appcore.init.Initializable#deinitialize()
 	 */
 	@Override
-	public void deinitialize(Registry registry, ApiConfig apiConfig) throws Exception {
-		registry.remove(Registrable.SUPPORTED_CONTAINER_FORMATS);
-		registry.remove(Registrable.SUPPORTED_CODECS);
-		registry.remove(Registrable.SUPPORTED_MIME_TYPES);
+	public void deinitialize(ApiConfig apiConfig) throws Exception {
+		MapRegistry.INSTANCE.remove(Registrable.SUPPORTED_CONTAINER_FORMATS);
+		MapRegistry.INSTANCE.remove(Registrable.SUPPORTED_CODECS);
+		MapRegistry.INSTANCE.remove(Registrable.SUPPORTED_MIME_TYPES);
 		
 		// Ensure all of the added ones are removed.
 	}

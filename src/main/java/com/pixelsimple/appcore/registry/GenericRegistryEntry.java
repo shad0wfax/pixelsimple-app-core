@@ -10,7 +10,9 @@ import com.pixelsimple.appcore.ApiConfig;
 import com.pixelsimple.appcore.init.Initializable;
 
 /**
- *
+ * 
+ * This is an instance of {@link Initializable} so that it can be initialized correctly during the startup.  
+ * 
  * @author Akshay Sharma
  * May 15, 2012
  */
@@ -39,7 +41,7 @@ public class GenericRegistryEntry implements Initializable {
 	 * @see com.pixelsimple.appcore.init.Initializable#initialize(com.pixelsimple.appcore.Registry, com.pixelsimple.appcore.ApiConfig)
 	 */
 	@Override
-	public void initialize(Registry registry, ApiConfig apiConfig) throws Exception {
+	public void initialize(ApiConfig apiConfig) throws Exception {
 		entries = new HashMap<String, Object>(8);
 	}
 
@@ -47,7 +49,7 @@ public class GenericRegistryEntry implements Initializable {
 	 * @see com.pixelsimple.appcore.init.Initializable#deinitialize(com.pixelsimple.appcore.Registry, com.pixelsimple.appcore.ApiConfig)
 	 */
 	@Override
-	public void deinitialize(Registry registry, ApiConfig apiConfig) throws Exception {
+	public void deinitialize(ApiConfig apiConfig) throws Exception {
 		entries.clear();
 		entries = null;
 		

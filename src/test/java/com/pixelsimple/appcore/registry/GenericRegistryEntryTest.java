@@ -21,7 +21,7 @@ public class GenericRegistryEntryTest {
 	@Before
 	public void setUp() throws Exception {
 		registry = new GenericRegistryEntry();
-		registry.initialize(null, null);
+		registry.initialize(null);
 	}
 
 	@Test

@@ -14,6 +14,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.pixelsimple.commons.util.Assert;
+import com.pixelsimple.commons.util.OSUtils;
+import com.pixelsimple.commons.util.StringUtils;
 
 /**
  *
@@ -32,6 +34,14 @@ public class BootstrapInitializer {
 
 	// Should also init the logging here. Verify if this can lead to other issues?
 	private static final Logger LOG = LoggerFactory.getLogger(BootstrapInitializer.class);
+	
+	// Ensure that JAVA_SYS_ARG_APP_HOME_DIR dir is properly truncated
+	static {
+		String appHomeDir = System.getProperty(JAVA_SYS_ARG_APP_HOME_DIR);
+		
+		if (!StringUtils.isNullOrEmpty(appHomeDir))
+				System.setProperty(JAVA_SYS_ARG_APP_HOME_DIR, OSUtils.appendFolderSeparator(appHomeDir));
+	}
 	
 	/**
 	 * Return a Map of configuration by reading the system properties that matter.

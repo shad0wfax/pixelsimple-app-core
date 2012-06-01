@@ -15,7 +15,6 @@ import com.pixelsimple.appcore.registry.GenericRegistryEntry;
 import com.pixelsimple.appcore.registry.GenericRegistryEntryKey;
 import com.pixelsimple.appcore.registry.MapRegistry;
 import com.pixelsimple.appcore.registry.Registrable;
-import com.pixelsimple.appcore.registry.Registry;
 import com.pixelsimple.appcore.registry.RegistryService;
 import com.pixelsimple.commons.util.OSUtils;
 
@@ -95,13 +94,13 @@ public class AppInitializerTest {
 		initializer.addModuleInitializable(new Initializable() {
 			
 			@Override
-			public void initialize(Registry registry, ApiConfig config) throws Exception {
+			public void initialize(ApiConfig config) throws Exception {
 				GenericRegistryEntry entry = config.getGenericRegistryEntry();
 				entry.addEntry(TempEnum.A, "abc");
 			}
 			
 			@Override
-			public void deinitialize(Registry registry, ApiConfig config) throws Exception {
+			public void deinitialize(ApiConfig config) throws Exception {
 				GenericRegistryEntry entry = config.getGenericRegistryEntry();
 				entry.removeEntry(TempEnum.A);
 			}

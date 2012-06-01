@@ -18,6 +18,9 @@ import com.pixelsimple.commons.util.Assert;
  * Also more info here: http://stackoverflow.com/questions/70689/efficient-way-to-implement-singleton-pattern-in-java
  *
  * Usage of MapRegistry - MapRegistry.INSTANCE.xxxyyy()
+ * 
+ * IMPORTANT: 
+ * App Core classes can see MapRegistry.INSTANCE directly. The registry cannot be exposed outside of core directly.
  *
  * @author Akshay Sharma
  * Jan 14, 2012
