@@ -20,8 +20,9 @@ public class GenericRegistryEntry implements Initializable {
 	private static final String KEY_DELIM = ":";
 	private Map<String, Object> entries;
 	
-	public Object getEntry(GenericRegistryEntryKey key) {
-		return this.entries.get(this.getKeyString(key));
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T getEntry(GenericRegistryEntryKey key) {
+		return (T) this.entries.get(this.getKeyString(key));
 	}
 	
 	public GenericRegistryEntry addEntry(GenericRegistryEntryKey key, Object value) {
@@ -31,9 +32,10 @@ public class GenericRegistryEntry implements Initializable {
 		return this;
 	}
 
-	public Object removeEntry(GenericRegistryEntryKey key) {
+	@SuppressWarnings("unchecked")
+	public <T extends Object> T removeEntry(GenericRegistryEntryKey key) {
 		if (key != null) {
-			return this.entries.remove(this.getKeyString(key));
+			return (T) this.entries.remove(this.getKeyString(key));
 		}
 		return null;
 	}

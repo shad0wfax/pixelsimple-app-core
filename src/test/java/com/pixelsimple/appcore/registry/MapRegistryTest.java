@@ -209,7 +209,6 @@ public class MapRegistryTest {
 	@Test
 	public void testContainsKey() {
 		Registry reg1 = MapRegistry.INSTANCE;
-		Object val = new ApiConfigImpl();
 		
 		reg1.register(Registrable.API_CONFIG, "abc");
 		Assert.assertEquals(reg1.containsKey(Registrable.API_CONFIG), true);

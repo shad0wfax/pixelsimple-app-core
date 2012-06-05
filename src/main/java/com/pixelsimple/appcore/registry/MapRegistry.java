@@ -58,18 +58,20 @@ public enum MapRegistry implements Registry {
 	/* (non-Javadoc)
 	 * @see com.pixelsimple.appcore.registry.Registry#fetch(java.lang.Enum)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public Object fetch(Registrable key) {
-		return this.registry.get(key);
+	public <T extends Object> T fetch(Registrable key) {
+		return (T) this.registry.get(key);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.pixelsimple.appcore.registry.Registry#remove(java.lang.Enum)
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized Object remove(Registrable key) {
+	public synchronized <T extends Object> T  remove(Registrable key) {
 		Assert.notNull(key, "Pass a valid key from Registrable enum");
-		return this.registry.remove(key);
+		return (T) this.registry.remove(key);
 	}
 
 	/* (non-Javadoc)

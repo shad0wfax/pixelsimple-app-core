@@ -16,6 +16,8 @@ import com.pixelsimple.appcore.ApiConfigImpl;
 import com.pixelsimple.appcore.binlib.ffmpeg.FfmpegConfig;
 import com.pixelsimple.appcore.binlib.ffprobe.FfprobeConfig;
 import com.pixelsimple.appcore.config.Environment;
+import com.pixelsimple.appcore.queue.DefaultMapQueue;
+import com.pixelsimple.appcore.queue.QueueService;
 import com.pixelsimple.appcore.registry.GenericRegistryEntry;
 import com.pixelsimple.appcore.registry.MapRegistry;
 import com.pixelsimple.appcore.registry.Registrable;
@@ -69,10 +71,12 @@ public class AppInitializer {
 		for (Initializable initializable : MODULE_INITIALIZABLES) {
 			initializable.initialize(apiConfig);
 		}
+		
+		this.initQueue();
 	}
 
 	public void shutdown() throws Exception {
-		ApiConfig apiConfig = (ApiConfig) MapRegistry.INSTANCE.fetch(Registrable.API_CONFIG);
+		ApiConfig apiConfig = MapRegistry.INSTANCE.fetch(Registrable.API_CONFIG);
 		
 		// TODO: Add any hooks as needed. Do housekeeping. 
 		
@@ -100,8 +104,7 @@ public class AppInitializer {
 		FfprobeConfig ffprobeConfig = this.initFfprobe(env, immutableConfigMap);
 		
 		// Set it to the Api config:
-		GenericRegistryEntry genericRegistryEntry = (GenericRegistryEntry) MapRegistry.INSTANCE.fetch(
-				Registrable.GENERIC_REGISTRY_ENTRY);
+		GenericRegistryEntry genericRegistryEntry = MapRegistry.INSTANCE.fetch(Registrable.GENERIC_REGISTRY_ENTRY);
 		
 		apiConfigImpl.setEnvironment(env).setFfmpegConfig(ffmpegConfig).setFfprobeConfig(ffprobeConfig)
 			.setGenericConfig(genericRegistryEntry);
@@ -143,5 +146,14 @@ public class AppInitializer {
 	private Environment initEvn(Map<String, String> configMap) {
 		Environment environment = new Environment(configMap);
 		return environment;
+	}
+
+	private void initQueue() {
+		// If any initializable has registered a queue, don't do anything. Else register the default queue.
+		if (QueueService.getQueue() != null)
+			return;
+
+		QueueService.registerQueue(new DefaultMapQueue());
+		
 	}
 }

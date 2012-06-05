@@ -23,11 +23,11 @@ public interface Registry {
 	 */
 	void forceRegister(Registrable key, Object value);
 	
-	Object fetch(Registrable key);
+	<T extends Object> T fetch(Registrable key);
 	
 	boolean containsKey(Registrable key);
 	
-	Object remove(Registrable key);
+	<T extends Object> T remove(Registrable key);
 	
 	void removeAll();
 	

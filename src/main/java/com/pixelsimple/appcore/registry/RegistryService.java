@@ -23,15 +23,15 @@ public final class RegistryService {
 	 * @return
 	 */
 	public static ApiConfig getRegisteredApiConfig() {
-		return (ApiConfig) MapRegistry.INSTANCE.fetch(Registrable.API_CONFIG);
+		return MapRegistry.INSTANCE.fetch(Registrable.API_CONFIG);
 	}
 	
 	public static ContainerFormats getSupportedContainerFormats() {
-		return (ContainerFormats) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CONTAINER_FORMATS);
+		return MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CONTAINER_FORMATS);
 	}
 
 	public static Codecs getSupportedCodecs() {
-		return (Codecs) MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CODECS);
+		return MapRegistry.INSTANCE.fetch(Registrable.SUPPORTED_CODECS);
 	}
 	
 	public static Object getRegisteredEntry(Registrable key) {

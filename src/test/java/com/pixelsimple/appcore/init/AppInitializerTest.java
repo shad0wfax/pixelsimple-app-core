@@ -88,7 +88,7 @@ public class AppInitializerTest {
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
 		int size = MapRegistry.INSTANCE.fetchAllValues().size();
-		Assert.assertEquals(size, 5);
+		Assert.assertEquals(size, Registrable.values().length);
 		
 		initializer = new AppInitializer();
 		initializer.addModuleInitializable(new Initializable() {
@@ -128,7 +128,7 @@ public class AppInitializerTest {
 		initializer.init(configs);
 		
 		// Keep track on the count here and ensure it is updated based on init code
-		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 5);
+		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), Registrable.values().length);
 
 		// Can't do this any longer - since modules register their own stuff.
 //		for (Registrable r : Registrable.values()) {
