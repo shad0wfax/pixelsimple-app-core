@@ -14,14 +14,19 @@ import com.pixelsimple.commons.util.OSUtils;
  * Jan 14, 2012
  */
 public final class Environment {
+	private static final String APP_CONFIG_TEMP_DIR_KEY = "tempDirectory";
+
 	// This will the path to the package directory under which we will find the jre/bin/lib dirs.
 	private String appBasePath;
+	private String tempDirectory;
+
 	private OSUtils.OS CURRENT_OS = OSUtils.CURRENT_OS;
 	private Map<String, String> appConfigs;
 
 	public Environment(Map<String, String> appConfigs) {
 		this.appConfigs = appConfigs;
 		this.appBasePath = OSUtils.appendFolderSeparator(appConfigs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR));
+		this.tempDirectory = OSUtils.appendFolderSeparator(appConfigs.get(APP_CONFIG_TEMP_DIR_KEY));
 	}
 	
 	/**
@@ -48,8 +53,11 @@ public final class Environment {
 		return this.appConfigs;
 	}
 
+	public String getTempDirectory() {
+		return this.tempDirectory;
+	}
 	public String toString() {
-		return "appBasePath::" + appBasePath + "::CURRENT_OS::" + CURRENT_OS
+		return "appBasePath::" + appBasePath + "::CURRENT_OS::" + CURRENT_OS + "::tempDirectory::" + tempDirectory
 				+ "::App configs::" + appConfigs;
 	}
 

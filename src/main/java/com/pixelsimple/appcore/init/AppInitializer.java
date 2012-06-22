@@ -52,10 +52,11 @@ public class AppInitializer {
 		registry.register(Registrable.GENERIC_REGISTRY_ENTRY, genericRegistryEntry);
 	}
 
-	public void addModuleInitializable(Initializable object) {
+	public AppInitializer addModuleInitializable(Initializable object) {
 		if (object != null) {
 			MODULE_INITIALIZABLES.add(object);
 		}
+		return this;
 	}
 	
 	/**

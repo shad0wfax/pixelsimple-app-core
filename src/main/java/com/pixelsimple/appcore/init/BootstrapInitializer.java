@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,6 +25,7 @@ import com.pixelsimple.commons.util.StringUtils;
  * Jan 17, 2012
  */
 public class BootstrapInitializer {
+	private Pattern variableSubstitutionPattern = Pattern.compile("(\\$\\{[^}]*})",  Pattern.CASE_INSENSITIVE);
 
 	// Want the java cli params statically identified here.  
 	// The system arg passed from script during the startup: -Dapp.home=\COMPUTED_PATH\..
@@ -58,11 +61,8 @@ public class BootstrapInitializer {
 		// Check its a valid file:
 		File file = new File(configFile);
 		Assert.isTrue(file.isFile(), "Looks like the config file in not valid");
-		
-		Map<String, String> configs = new HashMap<String, String>();
+		Map<String, String> configs = this.loadConfigFile(file);
 		configs.put(JAVA_SYS_ARG_APP_HOME_DIR, appHomeDir);
-		
-		this.loadConfigFile(file, configs);
 		
 		LOG.debug("bootstrap::Final computed config map::{}.", configs);
 		
@@ -70,15 +70,64 @@ public class BootstrapInitializer {
 	}
 
 	// Note: not all param is a key-value pair. It could be a single value. Interpret it however needed. 
-	private void loadConfigFile(File configFile, Map<String, String> configs) throws Exception {
+	private Map<String, String> loadConfigFile(File configFile) throws Exception {
 		Properties props = new Properties();
 		props.load(new FileInputStream(configFile));
+
+		return this.asMapWithVariableSubstitution(props);
+	}
+	
+	/**
+	 * Other modules can use this method to get variable substitution if needed.
+	 * Te variable substitution allows values of properties to contain certain system properties.
+	 * Ex: tempDirectory=${app.home}/temp.
+	 * This method will replace the ${app.home} with a valid value if a system property by the name app.home exists. 
+	 * @param props
+	 * @return
+	 */
+	public Map<String, String> asMapWithVariableSubstitution(Properties props) {
+		Map<String, String> configs = new HashMap<String, String>();
 		Set<Map.Entry<Object, Object>> entries = props.entrySet();
 
 		for (Map.Entry<Object, Object> entry : entries) {
-			configs.put((String) entry.getKey(), (String) entry.getValue());
+			// Do variable substitution - replace any value that has system properties with the correct values.
+			String value = (String) entry.getValue();
+			value = variableSubstitute(value);
+
+			configs.put((String) entry.getKey(), value);
 		}
-			
+		return configs;
+	}
+ 
+	/**
+	 * @param value
+	 * @return
+	 */
+	private String variableSubstitute(String value) {
+		// If variables contain ${...} pattern, replace them with the system variable that is present in between (...).
+		// If no system variable is found, leave it as it is.
+		if (StringUtils.isNullOrEmpty(value))
+			return value;
+		
+		Matcher matcher = variableSubstitutionPattern.matcher(Matcher.quoteReplacement(value));
+		String replacement = value;
+
+		LOG.debug("value = {}", value);
+
+		while (matcher.find()) {
+			String patternGroup = matcher.group();
+			if (!StringUtils.isNullOrEmpty(patternGroup)) {
+				// Strip off the ${ and }
+				String systemVariable = patternGroup.substring(2, patternGroup.length() - 1);
+				String systemVariableValue = System.getProperty(systemVariable);				
+				if (!StringUtils.isNullOrEmpty(systemVariableValue)) {
+					replacement = replacement.replaceAll(Pattern.quote(patternGroup), Matcher.quoteReplacement(systemVariableValue));
+					
+					LOG.debug("variableSubstitute::Replaced systemVariable {} with value {}.", patternGroup, systemVariableValue);
+				}
+			}
+		}
+		return replacement;
 	}
 
 
