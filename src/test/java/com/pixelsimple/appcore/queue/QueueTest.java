@@ -3,20 +3,15 @@
  */
 package com.pixelsimple.appcore.queue;
 
-import static org.junit.Assert.*;
-
-import java.util.HashMap;
-import java.util.Map;
-
+import static org.junit.Assert.fail;
 import junit.framework.Assert;
 
 import org.junit.After;
 import org.junit.Test;
 
+import com.pixelsimple.appcore.TestAppInitializer;
 import com.pixelsimple.appcore.init.AppInitializer;
-import com.pixelsimple.appcore.init.BootstrapInitializer;
 import com.pixelsimple.appcore.registry.MapRegistry;
-import com.pixelsimple.commons.util.OSUtils;
 
 /**
  * @author Akshay Sharma
@@ -82,7 +77,7 @@ public class QueueTest {
 		Assert.assertNull(queue);
 
 		try {
-			new AppInitializer().init(getConfig());
+			new AppInitializer().init(TestAppInitializer.buildConfig());
 			queue = QueueService.getQueue();
 			Assert.assertNotNull(queue);
 		} catch (Exception e) {
@@ -99,7 +94,7 @@ public class QueueTest {
 		Assert.assertNull(queue);
 
 		try {
-			new AppInitializer().init(getConfig());
+			new AppInitializer().init(TestAppInitializer.buildConfig());
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -129,35 +124,5 @@ public class QueueTest {
 		public QueueIt(String x) { this.x = x; }
 		@Override public boolean equals(Object o) { return this.x.equals(o); }
 		@Override public int hashCode() { return this.x.hashCode(); }
-	}
-	
-
-	private Map<String, String> getConfig() {
-		Map<String, String> configs = new HashMap<String, String>();
-		
-		if (OSUtils.isWindows()) {
-			// Keep this path up to date with ffmpeg updates
-			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, "c:\\dev\\pixelsimple");
-			configs.put("ffprobePath", "ffprobe/32_bit/1.0/ffprobe.exe"); 
-			configs.put("ffmpegPath", "ffmpeg/32_bit/1.0/ffmpeg.exe"); 
-			
-			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
-			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/1.0/ffmpeg.exe"); 
-		} else if (OSUtils.isMac()) {
-			// Keep this path up to date with ffmpeg updates
-			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR,  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple");
-			configs.put("ffprobePath",  "ffprobe/32_bit/1.0/ffprobe"); 
-			configs.put("ffmpegPath",  "ffmpeg/32_bit/1.0/ffmpeg"); 
-
-			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
-			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/1.0/ffmpeg"); 
-		}  else {
-			// add linux based tests when ready :-)
-		}
-		
-		configs.put("hlsTranscodeCompleteFile", "pixelsimple_hls_transcode.complete"); 
-		configs.put("hlsFileSegmentPattern", "%06d"); 
-		
-		return configs;
 	}
 }

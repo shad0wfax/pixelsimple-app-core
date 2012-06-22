@@ -3,7 +3,6 @@
  */
 package com.pixelsimple.appcore.init;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import junit.framework.Assert;
@@ -11,6 +10,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.pixelsimple.appcore.ApiConfig;
+import com.pixelsimple.appcore.TestAppInitializer;
 import com.pixelsimple.appcore.registry.GenericRegistryEntry;
 import com.pixelsimple.appcore.registry.GenericRegistryEntryKey;
 import com.pixelsimple.appcore.registry.MapRegistry;
@@ -30,7 +30,7 @@ public class AppInitializerTest {
 	 */
 	@Test
 	public void initWithValidValues() throws Exception {
-		Map<String, String> configs = getConfig();
+		Map<String, String> configs = TestAppInitializer.buildConfig();
 		
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
@@ -50,7 +50,7 @@ public class AppInitializerTest {
 	 */
 	@Test
 	public void prooveAppConfigImmutability() throws Exception {
-		Map<String, String> configs = getConfig();
+		Map<String, String> configs = TestAppInitializer.buildConfig();
 		
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
@@ -83,7 +83,7 @@ public class AppInitializerTest {
 	 */
 	@Test
 	public void addModuleInitializers() throws Exception {
-		Map<String, String> configs = getConfig();
+		Map<String, String> configs = TestAppInitializer.buildConfig();
 		
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
@@ -122,7 +122,7 @@ public class AppInitializerTest {
 	 */
 	@Test
 	public void verifyRegistryEntries() throws Exception {
-		Map<String, String> configs = getConfig();
+		Map<String, String> configs = TestAppInitializer.buildConfig();
 		
 		AppInitializer initializer = new AppInitializer();
 		initializer.init(configs);
@@ -138,35 +138,6 @@ public class AppInitializerTest {
 		Assert.assertEquals(MapRegistry.INSTANCE.fetchAllValues().size(), 0);
 	}
 
-	private Map<String, String> getConfig() {
-		Map<String, String> configs = new HashMap<String, String>();
-		
-		if (OSUtils.isWindows()) {
-			// Keep this path up to date with ffmpeg updates
-			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, "c:\\dev\\pixelsimple");
-			configs.put("ffprobePath", "ffprobe/32_bit/1.0/ffprobe.exe"); 
-			configs.put("ffmpegPath", "ffmpeg/32_bit/1.0/ffmpeg.exe"); 
-			
-			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
-			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/1.0/ffmpeg.exe"); 
-		} else if (OSUtils.isMac()) {
-			// Keep this path up to date with ffmpeg updates
-			configs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR,  OSUtils.USER_SYSTEM_HOME_DIR + "/dev/pixelsimple");
-			configs.put("ffprobePath",  "ffprobe/32_bit/1.0/ffprobe"); 
-			configs.put("ffmpegPath",  "ffmpeg/32_bit/1.0/ffmpeg"); 
-
-			// Will use the ffmpeg path for testing this... pain to setup a file on each dev system.
-			configs.put("hlsPlaylistGeneratorPath", "ffmpeg/32_bit/1.0/ffmpeg"); 
-		}  else {
-			// add linux based tests when ready :-)
-		}
-		
-		configs.put("hlsTranscodeCompleteFile", "pixelsimple_hls_transcode.complete"); 
-		configs.put("hlsFileSegmentPattern", "%06d"); 
-		
-		return configs;
-	}
-	
 	private enum TempEnum implements GenericRegistryEntryKey {
 		A;
 

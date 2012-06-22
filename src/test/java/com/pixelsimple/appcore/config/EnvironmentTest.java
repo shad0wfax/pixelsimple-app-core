@@ -29,20 +29,25 @@ public class EnvironmentTest {
 
 		String path = "c:\\dev\\pixelsimple\\app";		
 		appConfigs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, path);
+		appConfigs.put("tempDirectory", path +"\\temp");
 		Environment impl = new Environment(appConfigs);
 		Assert.assertEquals(impl.getCurrentOS(), OSUtils.CURRENT_OS);
 		Assert.assertEquals(impl.getAppBasePath(), path + OSUtils.folderSeparator());
+		Assert.assertEquals(impl.getTempDirectory(), path +"\\temp" + OSUtils.folderSeparator());
 	
 		path = "c:\\dev\\pixelsimple\\app/";
 		appConfigs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, path);
+		appConfigs.put("tempDirectory", path +"\\temp/");
 		impl = new Environment(appConfigs);
 		Assert.assertEquals(impl.getAppBasePath(), path.substring(0, path.length() - 1) + OSUtils.folderSeparator());
+		Assert.assertEquals(impl.getTempDirectory(), path +"\\temp" + OSUtils.folderSeparator());
 		
 		path = "/usr/local/mypath";
 		appConfigs.put(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR, path);
+		appConfigs.put("tempDirectory", path+"/temp");
 		impl = new Environment(appConfigs);
 		Assert.assertEquals(impl.getAppBasePath(), path + OSUtils.folderSeparator());
-		
+		Assert.assertEquals(impl.getTempDirectory(), path +"/temp" + OSUtils.folderSeparator());
 	}
 
 }

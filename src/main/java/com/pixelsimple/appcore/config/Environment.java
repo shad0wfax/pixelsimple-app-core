@@ -6,6 +6,7 @@ package com.pixelsimple.appcore.config;
 import java.util.Map;
 
 import com.pixelsimple.appcore.init.BootstrapInitializer;
+import com.pixelsimple.commons.util.Assert;
 import com.pixelsimple.commons.util.OSUtils;
 
 /**
@@ -25,8 +26,14 @@ public final class Environment {
 
 	public Environment(Map<String, String> appConfigs) {
 		this.appConfigs = appConfigs;
-		this.appBasePath = OSUtils.appendFolderSeparator(appConfigs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR));
-		this.tempDirectory = OSUtils.appendFolderSeparator(appConfigs.get(APP_CONFIG_TEMP_DIR_KEY));
+		String appBasePath = appConfigs.get(BootstrapInitializer.JAVA_SYS_ARG_APP_HOME_DIR);
+		Assert.notNullAndNotEmpty(appBasePath, "The app base path system property has to be set for app to startup."); 
+
+		String tempDir = appConfigs.get(APP_CONFIG_TEMP_DIR_KEY);
+		Assert.notNullAndNotEmpty(tempDir, "The temp directory has to be configured for app to startup."); 
+		
+		this.appBasePath = OSUtils.appendFolderSeparator(appBasePath);
+		this.tempDirectory = OSUtils.appendFolderSeparator(tempDir);
 	}
 	
 	/**
