@@ -52,7 +52,8 @@ public class GenericRegistryEntry implements Initializable {
 	 */
 	@Override
 	public void deinitialize(ApiConfig apiConfig) throws Exception {
-		entries.clear();
+		if (entries != null)
+			entries.clear();
 		entries = null;
 		
 	}

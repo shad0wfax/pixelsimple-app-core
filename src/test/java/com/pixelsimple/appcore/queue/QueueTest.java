@@ -25,9 +25,9 @@ public class QueueTest {
 	@After
 	public void tearDown() throws Exception {
 		MapRegistry.INSTANCE.removeAll();
+		TestAppInitializer.shutdownAppInit();
 	}
 	
-
 	/**
 	 * Test method for {@link com.pixelsimple.appcore.queue.QueueService#getQueue()}.
 	 */

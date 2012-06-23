@@ -69,6 +69,7 @@ public class AppInitializer {
 		ApiConfig apiConfig = this.initCore(immutableConfigMap);
 
 		// init the registered module initialzables
+		// TODO: Handle error better when a module fails to initialize. Remove it from the list! 
 		for (Initializable initializable : MODULE_INITIALIZABLES) {
 			initializable.initialize(apiConfig);
 		}

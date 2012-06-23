@@ -7,6 +7,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
+import org.junit.After;
 import org.junit.Test;
 
 import com.pixelsimple.appcore.ApiConfig;
@@ -24,6 +25,11 @@ import com.pixelsimple.commons.util.OSUtils;
  * Jan 18, 2012
  */
 public class AppInitializerTest {
+	
+	@After
+	public void tearDown() throws Exception {
+		TestAppInitializer.shutdownAppInit();
+	}
 
 	/**
 	 * Test method for {@link com.pixelsimple.appcore.init.AppInitializer#init(java.util.Map)}.
