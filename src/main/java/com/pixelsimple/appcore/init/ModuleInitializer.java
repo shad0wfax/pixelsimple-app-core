@@ -22,15 +22,18 @@ public abstract class ModuleInitializer implements Initializable {
 	protected Map<String, String> moduleConfigurationMap;
 	
 	/**
-	 * A hack constructor that lets us have implementations that don't have to provide a constructor with arguments.
+	 * A default constructor that does not load any module config files. Implementations that don't care about having 
+	 * their module configs inside config/module directory can use this.
+	 */
+	public ModuleInitializer() {}
+	
+	/**
+	 * A constructor that lets us have implementations that provide a module config file to load.
 	 * But the implementation class can pass a module config file as first argument to this constructor vis super().
 	 * @param moduleConfigFiles
 	 */
-	public ModuleInitializer(String... moduleConfigFiles) {
-		if (moduleConfigFiles.length > 0) {
-			String configFile = moduleConfigFiles[0];
-			this.moduleConfigFile = configFile;
-		}
+	public ModuleInitializer(String moduleConfigFile) {
+		this.moduleConfigFile = moduleConfigFile;
 	}
 	
 	/* (non-Javadoc)
