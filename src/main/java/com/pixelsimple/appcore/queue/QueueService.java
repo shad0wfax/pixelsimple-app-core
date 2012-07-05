@@ -16,7 +16,8 @@ public class QueueService {
 	private QueueService() {}
 	
 	public static Queue getQueue() {
-		
+	
+		// Since we are piggybacking on Registry for reads, there is no need for explicit sync. The registry does that for us.
 		return MapRegistry.INSTANCE.fetch(Registrable.QUEUE);
 	}
 	

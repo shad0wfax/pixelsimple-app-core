@@ -6,13 +6,14 @@ package com.pixelsimple.appcore.registry;
 import java.util.Collection;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 import com.pixelsimple.commons.util.Assert;
 
 /**
  * An enum based singleton object that implements the Registry. 
  * It uses a map (enummap) underneath to store the key-value. 
- * Only the register method is synchronized. The fetch method isn't to allow quick reads.
  * 
  * Enum as a singleton object is based on the recommendation in Effective.Java 2nd Edition by Joshua Bloch.
  * Also more info here: http://stackoverflow.com/questions/70689/efficient-way-to-implement-singleton-pattern-in-java
@@ -24,35 +25,50 @@ import com.pixelsimple.commons.util.Assert;
  *
  * @author Akshay Sharma
  * Jan 14, 2012
+ * Modified July 5, 2012 to use RenentrantLocks instead of full synchronized code. This is a much better performant 
+ * code and does not block the reader threads. For more info, refer the book:
+ * Programming Concurrency on JVM Sec: 5.7 Ensure Atomicity - by Venkat Subramaniam 
  */
 public enum MapRegistry implements Registry {
 	// Only one enum value can exist. This is the instance enum. Guarantees the singleton.
 	INSTANCE;
 	
 	private Map<Registrable, Object> registry = new EnumMap<Registrable, Object>(Registrable.class);
+	private final ReadWriteLock monitor = new ReentrantReadWriteLock();
 
 	/* (non-Javadoc)
 	 * @see com.pixelsimple.appcore.registry.Registry#register(java.lang.Enum, java.lang.Class)
 	 */
 	@Override
-	public synchronized void register(Registrable key, Object value) {
-		if (this.containsKey(key)) {
-			return;
-		}
-
-		// Key is checked anyway in the contains key
+	public void register(Registrable key, Object value) {
+		Assert.notNull(key, "Pass a valid key from Registrable enum");
 		Assert.notNull(value, "The value being added to the registry cannot be null. This is by design.");
-		this.registry.put(key, value);
+
+		monitor.writeLock().lock();
+		try {
+			if (this.registry.containsKey(key)) {
+				return;
+			}
+			this.registry.put(key, value);
+		} finally {
+			monitor.writeLock().unlock();
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see com.pixelsimple.appcore.registry.Registry#forceRegister(com.pixelsimple.appcore.registry.Registrable, java.lang.Object)
 	 */
 	@Override
-	public synchronized void forceRegister(Registrable key, Object value) {
+	public void forceRegister(Registrable key, Object value) {
 		Assert.notNull(key, "Pass a valid key from Registrable enum");
 		Assert.notNull(value, "The value being added to the registry cannot be null. This is by design.");
-		this.registry.put(key, value);
+
+		monitor.writeLock().lock();
+		try {
+			this.registry.put(key, value);
+		} finally {
+			monitor.writeLock().unlock();
+		}
 	}
 	
 	/* (non-Javadoc)
@@ -61,7 +77,13 @@ public enum MapRegistry implements Registry {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends Object> T fetch(Registrable key) {
-		return (T) this.registry.get(key);
+		// Will synchronize the read calls as well - This is to ensure that memory barrier is crossed.
+		monitor.readLock().lock();
+		try {
+			return (T) this.registry.get(key);
+		} finally {
+			monitor.readLock().unlock();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -69,17 +91,27 @@ public enum MapRegistry implements Registry {
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public synchronized <T extends Object> T  remove(Registrable key) {
+	public <T extends Object> T remove(Registrable key) {
 		Assert.notNull(key, "Pass a valid key from Registrable enum");
-		return (T) this.registry.remove(key);
+		monitor.writeLock().lock();
+		try {
+			return (T) this.registry.remove(key);
+		} finally {
+			monitor.writeLock().unlock();
+		}
 	}
 
 	/* (non-Javadoc)
 	 * @see com.pixelsimple.appcore.registry.Registry#removeAll()
 	 */
 	@Override
-	public synchronized void removeAll() {
-		this.registry.clear();
+	public void removeAll() {
+		monitor.writeLock().lock();
+		try {
+			this.registry.clear();
+		} finally {
+			monitor.writeLock().unlock();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -87,7 +119,13 @@ public enum MapRegistry implements Registry {
 	 */
 	@Override
 	public Collection<?> fetchAllValues() {
-		return this.registry.values();
+		// Will synchronize the read calls as well - This is to ensure that memory barrier is crossed.
+		monitor.readLock().lock();
+		try {
+			return this.registry.values();
+		} finally {
+			monitor.readLock().unlock();
+		}
 	}
 
 	/* (non-Javadoc)
@@ -96,12 +134,17 @@ public enum MapRegistry implements Registry {
 	@Override
 	public boolean containsKey(Registrable key) {
 		Assert.notNull(key, "Pass a valid key from Registrable enum");
-		Object valueExisting = this.fetch(key);
-		
-		if (valueExisting != null) {
-			return true;
+		// Will synchronize the read calls as well - This is to ensure that memory barrier is crossed.
+		monitor.readLock().lock();
+		try {
+			Object valueExisting = this.registry.get(key);
+			if (valueExisting != null)
+				return true;
+			return false;
+		} finally {
+			monitor.readLock().unlock();
 		}
-		return false;
+		
 	}
 
 }

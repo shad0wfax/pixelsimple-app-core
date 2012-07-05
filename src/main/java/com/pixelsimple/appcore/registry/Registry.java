@@ -6,6 +6,7 @@ package com.pixelsimple.appcore.registry;
 import java.util.Collection;
 
 /**
+ * Synchornizes access but not blocking the readers (fetch and containsKey calls) - using Re-entrant locks.
  *
  * @author Akshay Sharma
  * Jan 15, 2012
